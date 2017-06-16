@@ -14,6 +14,8 @@ function [ output_args ] = AddToMatlabPath( FullyQualifiedDirectoryToAdd, MfileT
 % FullyQualifiedDirectoryToAdd to work around the fact that change
 % notification on network shares sometimes does not work.
 
+% exclude path segments containing the following sections
+ExcludeDirectoryPatternList = {'.git'};
 
 output_args = [];
 CurrentDir = pwd;
@@ -53,6 +55,19 @@ end
 % now add them again
 disp(['Adding ', FullyQualifiedDirectoryToAdd, ' and subdirectories temorarily to matlab path.']);
 addpath(genpath(pwd()));
+
+% remove .git folders to keep the matlab path reasonable
+CurrentMatlabPath = path;
+for iExcludeDirectoryPattern = 1 : length(ExcludeDirectoryPatternList)
+	CurrentExcludePattern = ExcludeDirectoryPatternList{iExcludeDirectoryPattern};
+	while length(CurrentMatlabPath) > 0
+		[CurrentPathItem, remain] = strtok(CurrentMatlabPath, ';:');
+		CurrentMatlabPath = remain(2:end);
+		if ~isempty(strfind(CurrentPathItem, CurrentExcludePattern))
+			rmpath(CurrentPathItem);
+		end
+	end
+end
 
 
 if ~isempty(MfileToOpen)
