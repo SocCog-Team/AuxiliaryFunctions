@@ -18,19 +18,19 @@ switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
 		if isdir('/Volumes/social_neuroscience_data/taskcontroller')
 			% remote data repository
 			DS.SCP_DATA_BaseDir = fullfile('/', 'Volumes', 'social_neuroscience_data', 'taskcontroller');
-			DS.SCP_CODE_BaseDir = fullfile(SCP_DATA_BaseDir, 'CODE');
+			DS.SCP_CODE_BaseDir = fullfile(DS.SCP_DATA_BaseDir, 'CODE');
 		else
 			% local data copy
 			disp('SCP data server share not mounted, falling back to local copy...');
 			DS.SCP_DATA_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller');
-			DS.SCP_CODE_BaseDir = fullfile(SCP_DATA_BaseDir, 'CODE');
+			DS.SCP_CODE_BaseDir = fullfile(DS.SCP_DATA_BaseDir, 'CODE');
 		end
 	case 'SCP-CTRL-00'
 		DS.SCP_DATA_BaseDir = fullfile('Z:', 'taskcontroller');
-		DS.SCP_CODE_BaseDir = fullfile(SCP_DATA_BaseDir, 'CODE');
+		DS.SCP_CODE_BaseDir = fullfile(DS.SCP_DATA_BaseDir, 'CODE');
 	case 'SCP-CTRL-01'
 		DS.SCP_DATA_BaseDir = fullfile('Z:', 'taskcontroller');
-		DS.SCP_CODE_BaseDir = fullfile(SCP_DATA_BaseDir, 'CODE');
+		DS.SCP_CODE_BaseDir = fullfile(DS.SCP_DATA_BaseDir, 'CODE');
 	otherwise
 		error(['Hostname ', host_name(1:end-1), ' not handeled yet']);
 end

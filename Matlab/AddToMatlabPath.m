@@ -39,6 +39,8 @@ PathToAddIsAlreadyDefined = strfind(CurrentMatlabPath, [FullyQualifiedDirectoryT
 % this is a work around for matlab's inability to detect changed files on
 % many network shares (especially windows)
 if ~isempty(PathToAddIsAlreadyDefined)
+	disp(['Removing directory tree from matlab path starting with ', FullyQualifiedDirectoryToAdd]);
+	disp('This might take a while...');
 	% turn the path into cell array
 	while length(CurrentMatlabPath) > 0
 		[CurrentPathItem, remain] = strtok(CurrentMatlabPath, ';:');
@@ -49,6 +51,7 @@ if ~isempty(PathToAddIsAlreadyDefined)
 	end
 end
 % now add them again
+disp(['Adding ', FullyQualifiedDirectoryToAdd, ' and subdirectories temorarily to matlab path.']);
 addpath(genpath(pwd()));
 
 

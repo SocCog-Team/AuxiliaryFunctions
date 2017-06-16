@@ -5,9 +5,7 @@ function [ output_args ] = AddSCPCodeToMatlabPath( input_args )
 CurrentDir = pwd;
 
 % we need to start somewhere, so go there manually
-cd (fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller', 'CODE', 'AuxiliaryFunctions', 'Matlab'));
-
-
+%cd (fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller', 'CODE', 'AuxiliaryFunctions', 'Matlab'));
 % assuming we are in SCPDirs.SCP_CODE_BaseDir.AuxiliaryFunctions already
 cd (fullfile(pwd, 'Matlab'));
 
