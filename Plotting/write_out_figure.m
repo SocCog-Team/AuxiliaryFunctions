@@ -21,19 +21,17 @@ switch img_type(2:end)
 		print(img_fh, '-dpdf', outfile_fqn);
 	case 'ps'
 		print(img_fh, '-depsc2', outfile_fqn);
-	case 'tiff'
+	case {'tiff', 'tif'}
 		% tiff creates a figure
 		print(img_fh, '-dtiff', outfile_fqn);
 	case 'png'
 		% tiff creates a figure
 		print(img_fh, '-dpng', outfile_fqn);
-		% 	case 'tif'
-		% 		% tif only creates the image
-		% 		% write out the mosaic as image, sadly the compression does not work...
-		% 		imwrite(mos, outfile_fqn, img_type, 'Compression', 'none');
 	case 'fig'	
 		%sm: allows to save figures for further refinements
-		saveas(img_fh, outfile_fqn, 'fig');
+		saveas(img_fh, outfile_fqn, 'fig');		
+	case 'eps'
+		print (img_fh, '-depsc', '-r300', outfile_fqn); 
 	otherwise
 		% default to uncompressed images
 		disp(['Image type: ', img_type, ' not handled yet...']);
