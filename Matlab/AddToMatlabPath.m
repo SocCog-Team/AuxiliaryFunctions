@@ -16,7 +16,7 @@ function [ output_args ] = AddToMatlabPath( FullyQualifiedDirectoryToAdd, MfileT
 
 
 output_args = [];
-%CurrentDir = pwd;
+CurrentDir = pwd;
 
 % allow empty or missing FullyQualifiedDirectoryToAdd
 if ~exist('FullyQualifiedDirectoryToAdd', 'var') || isempty(FullyQualifiedDirectoryToAdd)
@@ -59,5 +59,8 @@ end
 if ~isempty(MfileToRun)
 	run(MfileToOpen);
 end
+
+cd(CurrentDir);
+
 return
 
