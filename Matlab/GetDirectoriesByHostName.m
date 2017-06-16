@@ -17,20 +17,24 @@ switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
 	case {'hms-beagle2', 'hms-beagle2.local'}
 		if isdir('/Volumes/social_neuroscience_data/taskcontroller')
 			% remote data repository
-			SCP_DATA_BaseDir = fullfile('/', 'Volumes', 'social_neuroscience_data', 'taskcontroller');
+			DS.SCP_DATA_BaseDir = fullfile('/', 'Volumes', 'social_neuroscience_data', 'taskcontroller');
+			DS.SCP_CODE_BaseDir = fullfile(SCP_DATA_BaseDir, 'CODE');
 		else
 			% local data copy
 			disp('SCP data server share not mounted, falling back to local copy...');
-			SCP_DATA_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller');
+			DS.SCP_DATA_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller');
+			DS.SCP_CODE_BaseDir = fullfile(SCP_DATA_BaseDir, 'CODE');
 		end
 	case 'SCP-CTRL-00'
-		SCP_DATA_BaseDir = fullfile('Z:', 'taskcontroller');
+		DS.SCP_DATA_BaseDir = fullfile('Z:', 'taskcontroller');
+		DS.SCP_CODE_BaseDir = fullfile(SCP_DATA_BaseDir, 'CODE');
 	case 'SCP-CTRL-01'
-		SCP_DATA_BaseDir = fullfile('Z:', 'taskcontroller');
+		DS.SCP_DATA_BaseDir = fullfile('Z:', 'taskcontroller');
+		DS.SCP_CODE_BaseDir = fullfile(SCP_DATA_BaseDir, 'CODE');
 	otherwise
 		error(['Hostname ', host_name(1:end-1), ' not handeled yet']);
 end
 
-DirectoriesStruct.SCP_DATA_BaseDir = SCP_DATA_BaseDir;
+DirectoriesStruct = DS;
 end
 
