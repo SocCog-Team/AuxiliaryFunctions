@@ -35,7 +35,7 @@ switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
 % 		DS.SCP_CODE_BaseDir = fullfile(DS.SCP_DATA_BaseDir, 'CODE');
 	otherwise
 		error(['Hostname ', host_name(1:end-1), ' not handeled yet']);
-end
+end-
 
 DirectoriesStruct = DS;
 end
