@@ -13,7 +13,7 @@ function [ DirectoriesStruct ] = GetDirectoriesByHostName( )
 
 % ready this for unix systems...
 [sys_status, host_name] = system('hostname');
-DS.CurrentHostName = host_name;
+DS.CurrentHostName = host_name(1:end-1);
 
 switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
 	case {'hms-beagle2', 'hms-beagle2.local'}
@@ -35,7 +35,7 @@ switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
 % 		DS.SCP_CODE_BaseDir = fullfile(DS.SCP_DATA_BaseDir, 'CODE');
 	otherwise
 		error(['Hostname ', host_name(1:end-1), ' not handeled yet']);
-end-
+end
 
 DirectoriesStruct = DS;
 end
