@@ -45,7 +45,7 @@ if ~isempty(PathToAddIsAlreadyDefined)
 	disp('This might take a while...');
 	% turn the path into cell array
 	while length(CurrentMatlabPath) > 0
-		[CurrentPathItem, remain] = strtok(CurrentMatlabPath, ';:');
+		[CurrentPathItem, remain] = strtok(CurrentMatlabPath, pathsep);
 		CurrentMatlabPath = remain(2:end);
 		if ~isempty(strfind(CurrentPathItem, FullyQualifiedDirectoryToAdd))
 			rmpath(CurrentPathItem);
@@ -61,7 +61,7 @@ CurrentMatlabPath = path;
 for iExcludeDirectoryPattern = 1 : length(ExcludeDirectoryPatternList)
 	CurrentExcludePattern = ExcludeDirectoryPatternList{iExcludeDirectoryPattern};
 	while length(CurrentMatlabPath) > 0
-		[CurrentPathItem, remain] = strtok(CurrentMatlabPath, ';:');
+		[CurrentPathItem, remain] = strtok(CurrentMatlabPath, pathsep);
 		CurrentMatlabPath = remain(2:end);
 		if ~isempty(strfind(CurrentPathItem, CurrentExcludePattern))
 			rmpath(CurrentPathItem);
