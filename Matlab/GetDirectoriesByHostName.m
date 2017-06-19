@@ -13,7 +13,7 @@ function [ DirectoriesStruct ] = GetDirectoriesByHostName( )
 
 % ready this for unix systems...
 [sys_status, host_name] = system('hostname');
-DS.CurrentHostName = strtrim(host_name(1:end-1));
+DS.CurrentHostName = strtrim(host_name);
 
 switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
 	case {'hms-beagle2', 'hms-beagle2.local'}
