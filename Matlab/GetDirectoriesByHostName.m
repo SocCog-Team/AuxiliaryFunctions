@@ -13,6 +13,8 @@ function [ DirectoriesStruct ] = GetDirectoriesByHostName( )
 
 % ready this for unix systems...
 [sys_status, host_name] = system('hostname');
+DS.CurrentHostName = host_name;
+
 switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
 	case {'hms-beagle2', 'hms-beagle2.local'}
 		if isdir('/Volumes/social_neuroscience_data/taskcontroller')
