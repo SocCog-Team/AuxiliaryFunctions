@@ -53,7 +53,7 @@ if ~isempty(PathToAddIsAlreadyDefined)
 	end
 end
 % now add them again
-disp(['Adding ', FullyQualifiedDirectoryToAdd, ' and subdirectories temorarily to matlab path.']);
+disp(['Adding ', FullyQualifiedDirectoryToAdd, ' and subdirectories temporarily to matlab path.']);
 addpath(genpath(pwd()));
 
 % remove .git folders to keep the matlab path reasonable
