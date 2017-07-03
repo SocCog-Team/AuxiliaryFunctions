@@ -1,4 +1,4 @@
-function [ DirectoriesStruct ] = GetDirectoriesByHostName( )
+function [ DirectoriesStruct ] = GetDirectoriesByHostName( override_directive )
 %GETBASEDIRECTORYBYHOSTNAME this basically encapsulates a selection table
 %to allow selecting specific directories for different computers.
 %   The assumption is that on different hosts the data filesystem hierarchy
@@ -10,6 +10,10 @@ function [ DirectoriesStruct ] = GetDirectoriesByHostName( )
 % Just add new case clauses for new machines. If new directories need to be
 % exported, make sure to add to all existing clauses...
 
+if ~exist('override_directive', 'var')
+    override_directive = [];
+end
+
 
 % ready this for unix systems...
 [sys_status, host_name] = system('hostname');
@@ -17,7 +21,7 @@ DS.CurrentHostName = strtrim(host_name);
 
 switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
 	case {'hms-beagle2', 'hms-beagle2.local'}
-		if isdir('/Volumes/social_neuroscience_data/taskcontroller')
+		if isdir('/Volumes/social_neuroscience_data/taskcontroller') && ~(strcmp(override_directive, 'local'))
 			% remote data repository
 			DS.SCP_DATA_BaseDir = fullfile('/', 'Volumes', 'social_neuroscience_data', 'taskcontroller');
 			DS.SCP_CODE_BaseDir = fullfile(DS.SCP_DATA_BaseDir, 'CODE');

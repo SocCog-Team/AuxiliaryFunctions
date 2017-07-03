@@ -12,14 +12,16 @@ CurrentFunctionDir = fileparts(mfilename('fullpath')); % where does the function
 cd (fullfile(CurrentFunctionDir, 'Matlab'));
 
 % abstract over different filesystem starting points
-SCPDirs = GetDirectoriesByHostName();
+
+override_directive = 'local'; %this allows to override automatically using the network, requires host specific changes to GetDirectoriesByHostName
+SCPDirs = GetDirectoriesByHostName(override_directive);
 
 
 %AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir), [], [] );
 % selectively add the different code repositories
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'AuxiliaryFunctions'), [], [] );
-AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'LogFileAnalysis'), [], fullfile(SCPDirs.SCP_CODE_BaseDir, 'LogFileAnalysis', 'fnParseEventIDEReportSCPv06.m') );
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'SessionDataAnalysis'), [], [] );
+AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'LogFileAnalysis'), [], fullfile(SCPDirs.SCP_CODE_BaseDir, 'LogFileAnalysis', 'fnParseEventIDEReportSCPv06.m') );
 
 
 cd(CurrentDir);
