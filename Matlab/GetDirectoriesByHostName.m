@@ -20,7 +20,7 @@ end
 DS.CurrentHostName = strtrim(host_name);
 
 switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
-	case {'hms-beagle2', 'hms-beagle2.local'}
+	case {'hms-beagle2', 'hms-beagle2.local', 'hms-beagle2.lan'}
 		if isdir('/Volumes/social_neuroscience_data/taskcontroller') && ~(strcmp(override_directive, 'local'))
 			% remote data repository
 			DS.SCP_DATA_BaseDir = fullfile('/', 'Volumes', 'social_neuroscience_data', 'taskcontroller');
