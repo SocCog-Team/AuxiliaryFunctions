@@ -7,6 +7,7 @@ function [ symbol_list, p_list, cols_idx_per_symbol] = fnConstructP_SymbolList( 
 % this generates the full match table of msatc_suffix is identical to eval([group_by_dim, '_names'])) 
 %TODO: 
 %		allow to pass upper_bounds and sorted_symbol_list
+%       remove tests with all zero columns
 
 
 p_class_upper_bounds_list = [0.05, 0.01, 0.005];
