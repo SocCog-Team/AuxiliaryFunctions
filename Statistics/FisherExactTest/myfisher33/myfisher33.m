@@ -1,4 +1,4 @@
-function Pvalue=myfisher33(x)
+function Pvalue=myfisher33(x, verbose)
 %P=MYFISHER33(X)- Fisher's Exact Probability Test on 3x3 matrix.
 %Fisher's exact test of 3x3 contingency tables permits calculation of
 %precise probabilities in situation where, as a consequence of small cell
@@ -45,7 +45,9 @@ function Pvalue=myfisher33(x)
 % test on 3x3 matrix
 % http://www.mathworks.com/matlabcentral/fileexchange/15482
 
-verbose
+if ~exist('verbose', 'var') || isempty(verbose)
+    verbose = 1;
+end
 
 %Input Error handling
 if ~isequal(size(x),[3 3])

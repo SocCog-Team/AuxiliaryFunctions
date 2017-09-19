@@ -1,4 +1,5 @@
-function [Pvalue TX np]=myfisher22(varargin)
+function [Pvalue TX np]=myfisher22(x, plts, verbose)
+%function [Pvalue TX np]=myfisher22(varargin)
 %P=MYFISHER22(X)- Fisher's Exact Probability Test.
 %Fisher's exact test of 2x2 contingency tables permits calculation of
 %precise probabilities in situation where, as a consequence of small cell
@@ -73,38 +74,67 @@ function [Pvalue TX np]=myfisher22(varargin)
 % test on 2x2 matrix
 % http://www.mathworks.com/matlabcentral/fileexchange/15434
 
-verbose = 0;
-
-%Input Error handling
-args=cell(varargin);
-nu=numel(args);
-if nu<=2
-    default.values = {[7 12; 8 3],0};
-    default.values(1:nu) = args;
-    [x plts] = deal(default.values{:});
-    if nu==0
-        plts=1;
-    end
-    if nu>=1
-        if ~isequal(size(x),[2 2])
-            error('Input matrix must be a 2x2 matrix')
-        end
-        if ~all(isfinite(x(:))) || ~all(isnumeric(x(:)))
-            error('Warning: all X values must be numeric and finite')
-        end
-        if ~isequal(x(:),round(x(:)))
-            error('Warning: X data matrix values must be whole numbers')
-        end
-    end
-    if nu==2
-        if plts ~= 0 && plts ~= 1 %check if plts is 0 or 1
-            error('Warning: PLTS must be 0 if you don''t want or 1 if you want to see plot.')
-        end
-    end
-else
-    error('Warning: Max two input data are required')
+if ~exist('verbose', 'var') || isempty(verbose)
+    verbose = 1;
 end
-clear args default nu
+
+if ~exist('plts', 'var') || isempty(plts)
+    plts = 0;
+else
+    if plts ~= 0 && plts ~= 1 %check if plts is 0 or 1
+        error('Warning: PLTS must be 0 if you don''t want or 1 if you want to see plot.');
+    end
+end
+
+if ~exist('x', 'var') || isempty(x)
+    %error('Input matrix must be a 2x2 matrix');
+    x = [7 12; 8 3];    % the default data
+else
+    if ~isequal(size(x),[2 2])
+        error('Input matrix must be a 2x2 matrix');
+    end
+    if ~all(isfinite(x(:))) || ~all(isnumeric(x(:)))
+        error('Warning: all X values must be numeric and finite');
+    end
+    if ~isequal(x(:),round(x(:)))
+        error('Warning: X data matrix values must be whole numbers');
+    end
+end
+
+if nargin > 3
+    error('Warning: Max three input data are required: contingency table, plts, verbosity');
+end
+
+% %Input Error handling
+% args=cell(varargin);
+% nu=numel(args);
+% if nu<=2
+%     default.values = {[7 12; 8 3],0};
+%     default.values(1:nu) = args;
+%     [x plts] = deal(default.values{:});
+%     if nu==0
+%         plts=1;
+%     end
+%     if nu>=1
+%         if ~isequal(size(x),[2 2])
+%             error('Input matrix must be a 2x2 matrix')
+%         end
+%         if ~all(isfinite(x(:))) || ~all(isnumeric(x(:)))
+%             error('Warning: all X values must be numeric and finite')
+%         end
+%         if ~isequal(x(:),round(x(:)))
+%             error('Warning: X data matrix values must be whole numbers')
+%         end
+%     end
+%     if nu==2
+%         if plts ~= 0 && plts ~= 1 %check if plts is 0 or 1
+%             error('Warning: PLTS must be 0 if you don''t want or 1 if you want to see plot.')
+%         end
+%     end
+% else
+%     error('Warning: Max two input data are required')
+% end
+% clear args default nu
 
 Rs=sum(x,2); %rows sum
 Cs=sum(x); %columns sum

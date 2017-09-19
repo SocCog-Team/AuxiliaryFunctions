@@ -1,4 +1,4 @@
-function Pvalue=myfisher23(x)
+function Pvalue=myfisher23(x, verbose)
 %P=MYFISHER23(X)- Fisher's Exact Probability Test on 2x3 matrix.
 %Fisher's exact test of 2x3 contingency tables permits calculation of
 %precise probabilities in situation where, as a consequence of small cell
@@ -47,7 +47,9 @@ function Pvalue=myfisher23(x)
 % test on 2x3 matrix
 % http://www.mathworks.com/matlabcentral/fileexchange/15399
 
-verbose = 0;
+if ~exist('verbose', 'var') || isempty(verbose)
+    verbose = 1;
+end
 
 %Input Error handling
 if ~isequal(size(x),[2 3])

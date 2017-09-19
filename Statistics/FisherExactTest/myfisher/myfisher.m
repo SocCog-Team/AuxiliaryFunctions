@@ -33,7 +33,14 @@ function P=myfisher(varargin)
 % and conditional test for any RxC matrix
 % http://www.mathworks.com/matlabcentral/fileexchange/26883
 
-verbose = 1;	% keep verbose to see MC approximations
+%CHANGES:
+%   sm see:
+%           https://www.mathworks.com/matlabcentral/fileexchange/26883-myfisher
+%       exchanged "if gpv<=op" with "if gpv<=op+eps"
+%   made verbose pass into the subfunctions
+
+%sm: verbose will be passed into the myfisherNN functions
+verbose = 0;	% keep verbose to see MC approximations, 
 
 %Input error Handling
 args=cell(varargin);
@@ -72,39 +79,39 @@ switch rows
 		switch columns
 			case 2
 				try
-					P = myfisher22(x);
+					P = myfisher22(x, verbose);
 				catch
 					disp('I am trying to download the myfisher22 function by Giuseppe Cardillo from FEX')
 					[F,Status]=urlwrite('http://www.mathworks.com/matlabcentral/fileexchange/15434-myfisher22?controller=file_infos&download=true','myfisher22.zip')
 					if Status
 						unzip(F);
-						P = myfisher22(x);
+						P = myfisher22(x, verbose);
 					end
 					clear F Status
 				end
 				return
 			case 3
 				try
-					P = myfisher23(x);
+					P = myfisher23(x, verbose);
 				catch
 					disp('I am trying to download the myfisher23 function by Giuseppe Cardillo from FEX')
 					[F,Status]=urlwrite('http://www.mathworks.com/matlabcentral/fileexchange/15399-myfisher23?controller=file_infos&download=true','myfisher23.zip')
 					if Status
 						unzip(F);
-						P = myfisher23(x);
+						P = myfisher23(x, verbose);
 					end
 					clear F Status
 				end
 				return
 			case 4
 				try
-					P = myfisher24(x);
+					P = myfisher24(x, verbose);
 				catch
 					disp('I am trying to download the myfisher24 function by Giuseppe Cardillo from FEX')
 					[F,Status]=urlwrite('http://www.mathworks.com/matlabcentral/fileexchange/19842-myfisher24?controller=file_infos&download=true','myfisher24.zip')
 					if Status
 						unzip(F);
-						P = myfisher24(x);
+						P = myfisher24(x, verbose);
 					end
 					clear F Status
 				end
@@ -113,13 +120,13 @@ switch rows
 	case 3
 		if columns==3
 			try
-				P = myfisher33(x);
+				P = myfisher33(x, verbose);
 			catch
 				disp('I am trying to download the myfisher33 function by Giuseppe Cardillo from FEX')
 				[F,Status]=urlwrite('http://www.mathworks.com/matlabcentral/fileexchange/15482-myfisher33?controller=file_infos&download=true','myfisher33.zip')
 				if Status
 					unzip(F);
-					P = myfisher33(x);
+					P = myfisher33(x, verbose);
 				end
 				clear F Status
 			end
@@ -210,7 +217,13 @@ for I=1:tbs
 	end
 	zf=gammaln(g+1); %compute log(x!)
 	gpv=exp(Kf-sum(zf(:))); %compute the p-value of the new matrix
-	if gpv<=op %if the current p-value is less or equal than the observed p-value...
+    
+    %sm see
+    %https://www.mathworks.com/matlabcentral/fileexchange/26883-myfisher
+    %for why the original test might be off
+	%if gpv<=op %if the current p-value is less or equal than the observed p-value...
+	if gpv<=op+eps %if the current p-value is less or equal than the observed p-value...
+        
 		MCC=MCC+1; %update the counter
 	end
 end
