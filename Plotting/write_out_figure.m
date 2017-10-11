@@ -39,9 +39,11 @@ switch img_type(2:end)
 	case 'ps3'
 		%print(img_fh, '-depsc2', outfile_fqn);
 		device_str = '-depsc';
+        print_options_str = '';
 	case {'ps', 'ps2'}
 		%print(img_fh, '-depsc2', outfile_fqn);
 		device_str = '-depsc2';
+        print_options_str = '';
 	case {'tiff', 'tif'}
 		% tiff creates a figure
 		%print(img_fh, '-dtiff', outfile_fqn);
