@@ -4,8 +4,8 @@ function [ output_rect ] = fnFormatPaperSize( type, gcf_h, fraction, do_center_i
 % 20070827sm: changed default output formatting to allow pretty paper output
 % Example usage:
 %     Cur_fh = figure('Name', 'Test');
-%     format_default('16to9slides');
-%     [output_rect] = format_paper('16to9landscape', gcf);
+%     fnFormatDefaultAxes('16to9slides');
+%     [output_rect] = fnFormatPaperSize('16to9landscape', gcf);
 %     set(gcf(), 'Units', 'centimeters', 'Position', output_rect);
 
 
@@ -28,6 +28,22 @@ left_edge_cm = 1;
 bottom_edge_cm = 2;
 
 switch type    
+    
+   case 'DPZ2017Evaluation'
+        left_edge_cm = 0.05;
+        bottom_edge_cm = 0.05;
+        dpz_column_width_cm = 34.7 * 0.8;   % the columns are 347, 350, 347 mm, but the imported pdf in illustrator are too large (0.395)
+        rect_w = (dpz_column_width_cm - 2*left_edge_cm) * fraction;
+        rect_h = ((dpz_column_width_cm * 610/987) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio
+        % configure the format PaperPositon [left bottom width height]
+        if (do_center_in_paper)
+            left_edge_cm = (A4_w_cm - rect_w) * 0.5;
+            bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
+        end
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+ 
+    
     case '16to9portrait'
         left_edge_cm = 1;
         bottom_edge_cm = 1;
