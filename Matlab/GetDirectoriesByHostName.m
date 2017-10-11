@@ -18,6 +18,7 @@ end
 % ready this for unix systems...
 [sys_status, host_name] = system('hostname');
 DS.CurrentHostName = strtrim(host_name);
+DS.CurrentShortHostName = DS.CurrentHostName;
 
 switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
 	case {'hms-beagle2', 'hms-beagle2.local', 'hms-beagle2.lan'}
@@ -30,7 +31,8 @@ switch host_name(1:end-1) % last char of host name result is ascii 10 (LF)
 			disp('SCP data server share not mounted, falling back to local copy...');
 			DS.SCP_DATA_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller');
 			DS.SCP_CODE_BaseDir = fullfile(DS.SCP_DATA_BaseDir, 'CODE');
-		end
+        end
+        DS.CurrentShortHostName = 'hms-beagle2';
 	case {'SCP-CTRL-00', 'SCP-CTRL-01', 'SCP-VIDEO-01-A', 'SCP-VIDEO-01-B'}
 		DS.SCP_DATA_BaseDir = fullfile('Z:', 'taskcontroller');
 		DS.SCP_CODE_BaseDir = fullfile(DS.SCP_DATA_BaseDir, 'CODE');
