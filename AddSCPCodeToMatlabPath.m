@@ -13,7 +13,9 @@ cd (fullfile(CurrentFunctionDir, 'Matlab'));
 
 % abstract over different filesystem starting points
 
-override_directive = 'local'; %this allows to override automatically using the network, requires host specific changes to GetDirectoriesByHostName
+%override_directive = 'local'; %this allows to override automatically using the network, requires host specific changes to GetDirectoriesByHostName
+override_directive = 'local_code'; %this allows to override automatically using the network, requires host specific changes to GetDirectoriesByHostName
+
 SCPDirs = GetDirectoriesByHostName(override_directive);
 
 
