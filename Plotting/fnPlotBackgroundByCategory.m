@@ -7,9 +7,13 @@ function [] = fnPlotBackgroundByCategory( CategoryByXValList, YLimits, ColorByCa
 % ColorByCategoryList gives the colorspec for each category
 % a category index of 0 denotes skip this x value
 
-%TODO:
+% TODO:
+%   Test and adapt for plots with step size other than one
+%   Test and adapt for plots starting at arbitrary values
+%       think about how to scsale each individual patch
+%
+% DONE:
 %   test with multiple categories
-
 
 % default to full opaqueness (the Variable has a terrible name in matlab)
 if ~exist('Transparency', 'var') || isempty(Transparency)
@@ -44,11 +48,13 @@ end
 
 % check and expand the transparency
 if (length(Transparency) > 1) && (length(Transparency) ~= max(unique_categories_list))
-    error(['The number of items in the Transparency array (', num2str(length(Transparency)), ') does not match the highest category index (', num2str(max(unique_categories_list)), ')?');
+    error(['The number of items in the Transparency array (', num2str(length(Transparency)), ') does not match the highest category index (', num2str(max(unique_categories_list)), ')?']);
 end
 
 if (length(Transparency) == 1) && (length(Transparency) < max(unique_categories_list))
     TransparencyByCategory = ones([max(unique_categories_list), 1]) * Transparency;
+else
+    TransparencyByCategory = Transparency;
 end
 
 for i_category = cat_start_idx : length(unique_categories_list)
