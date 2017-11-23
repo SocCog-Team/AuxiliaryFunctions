@@ -84,7 +84,7 @@ for i_category = cat_start_idx : length(unique_categories_list)
         end
     end
     % and now actually display the patch on the plot
-    patch('XData', patch_x_array, 'YData', patch_y_array, 'FaceColor', CurrentCatColor, 'EdgeColor', CurrentCatColor, 'EdgeAlpha', CurrentCatTransparency, 'FaceAlpha', CurrentCatTransparency);
+    patch('XData', patch_x_array, 'YData', patch_y_array, 'FaceColor', CurrentCatColor, 'EdgeColor', CurrentCatColor, 'EdgeAlpha', 0, 'FaceAlpha', CurrentCatTransparency);
 end
 
 return
