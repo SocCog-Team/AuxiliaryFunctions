@@ -34,6 +34,7 @@ end
 % first check whether a path definition mat file exists
 if exist(fullfile(start_dir, [DS.CurrentShortHostName, '.mat'])) == 2
     % the named mat file exists, so load the required variables
+    disp(['Found per host directory definition file, attempting to read from: ', fullfile(start_dir, [DS.CurrentShortHostName, '.mat'])]);
     tmp_mat_struct = load(fullfile(start_dir, [DS.CurrentShortHostName, '.mat']));
     
     if isfield(tmp_mat_struct, 'local')
