@@ -27,8 +27,7 @@ AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'LogFileAnalysis'), [], full
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'eyetrackerDataAnalysis'), [], [] );
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'coordination_testing'), [], [] );
 
-
 cd(CurrentDir);
-
+return
 end
 
