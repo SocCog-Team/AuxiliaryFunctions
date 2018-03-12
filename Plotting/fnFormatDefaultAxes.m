@@ -5,7 +5,9 @@ function [ ] = fnFormatDefaultAxes( type )
 %   type is simple a unique string to select the requested set
 % 20070827sm: changed default output formatting to allow pretty paper output
 switch type
-    
+
+    case 'PrimateNeurobiology2018DPZ'
+        set(0, 'DefaultAxesLineWidth', 2.0, 'DefaultAxesFontName', 'Arial', 'DefaultAxesFontSize', 20, 'DefaultAxesFontWeight', 'bold');        
     case 'DPZ2017Evaluation'
         set(0, 'DefaultAxesLineWidth', 2.0, 'DefaultAxesFontName', 'Arial', 'DefaultAxesFontSize', 20, 'DefaultAxesFontWeight', 'bold');    
     case '16to9slides'
@@ -14,11 +16,7 @@ switch type
         set(0, 'DefaultAxesLineWidth', 1.5, 'DefaultAxesFontName', 'Helvetica', 'DefaultAxesFontSize', 8, 'DefaultAxesFontWeight', 'bold');
     case 'sfn_poster'
         set(0, 'DefaultAxesLineWidth', 2.0, 'DefaultAxesFontName', 'Helvetica', 'DefaultAxesFontSize', 24, 'DefaultAxesFontWeight', 'bold');
-    case 'sfn_poster_2011'
-        set(0, 'DefaultAxesLineWidth', 2.0, 'DefaultAxesFontName', 'Helvetica', 'DefaultAxesFontSize', 18, 'DefaultAxesFontWeight', 'bold');
-    case 'sfn_poster_2012'
-        set(0, 'DefaultAxesLineWidth', 2.0, 'DefaultAxesFontName', 'Helvetica', 'DefaultAxesFontSize', 18, 'DefaultAxesFontWeight', 'bold');
-    case 'sfn_poster_2013'
+    case {'sfn_poster_2011', 'sfn_poster_2012', 'sfn_poster_2013'}
         set(0, 'DefaultAxesLineWidth', 2.0, 'DefaultAxesFontName', 'Helvetica', 'DefaultAxesFontSize', 18, 'DefaultAxesFontWeight', 'bold');
     case '20120519'
         set(0, 'DefaultAxesLineWidth', 2.0, 'DefaultAxesFontName', 'Helvetica', 'DefaultAxesFontSize', 12, 'DefaultAxesFontWeight', 'bold');
