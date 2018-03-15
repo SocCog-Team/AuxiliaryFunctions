@@ -1,4 +1,4 @@
-#! /bin/bash -x
+#! /bin/bash
 # helper function to pull from all relevant SCP repositories
 # TODO also implement cloning
 
