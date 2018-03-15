@@ -17,7 +17,7 @@ CALLING_DIR=$( pwd )
 for CUR_SCP_REPO in ${SCP_REPOSITORY_LIST[*]} ; do
     echo "Current repository to pull: ${CUR_SCP_REPO}"
     cd ../${CUR_SCP_REPO}
-    echo "git pull"
+    echo "Executing: git ${GITCOMMAND} in $( pwd )"
     git ${GITCOMMAND}
     cd ${CALLING_DIR}
 done
