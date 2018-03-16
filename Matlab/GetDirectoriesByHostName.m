@@ -74,8 +74,14 @@ else
             disp(['local.SCP_DATA_BaseDir: the fully qualified path to the local parent directory of the SCP_DATA directory']);
             disp(['remote.SCP_DATA_BaseDir: the fully qualified path to the remote parent directory of the SCP_DATA directory']);
             disp(['local.SCP_CODE_BaseDir: the fully qualified path to the local parent directory of the SCP Code directory']);
-            disp(['remote.SCP_CODE_BaseDir: the fully qualified path to the remote parent directory of the SCP Code directory']);
-            error('Unsure what to do now...');
+            disp(['remote.SCP_CODE_BaseDir: the fully qualified path to the remote parent directory of the SCP Code directory']);            
+            disp('');
+            disp('Please use the GUI to select the requested directories.');
+            [local, remote] = fn_select_basedirs( start_dir );
+            DS.local = local;
+            DS.remote = remote;
+            save(fullfile(start_dir, [DS.CurrentShortHostName, '.mat']), 'local', 'remote');
+            %error('Unsure what to do now...');
             
     end
 end
@@ -135,3 +141,17 @@ end
 DirectoriesStruct = DS;
 end
 
+function [ local, remote ] = fn_select_basedirs( start_dir )
+feature('UseOldFileDialogs',1);
+
+% the local folders
+local.SCP_CODE_BaseDir = uigetdir(fullfile(start_dir, '..', '..'), 'Please select the local SCP CODE base directory.');
+local.SCP_DATA_BaseDir = uigetdir(fullfile(start_dir, '..', '..', '..'), 'Please select the local SCP DATA base directory.');
+
+% the remote directories
+msgbox('Make sure to mount the server share containing the remote SCP_DATA directory before proceeding.');
+remote.SCP_CODE_BaseDir = uigetdir(fullfile(start_dir, '..', '..'), 'Please select the remote SCP CODE base directory.');
+remote.SCP_DATA_BaseDir = uigetdir(fullfile(start_dir, '..', '..', '..'), 'Please select the remote SCP DATA base directory.');
+
+return
+end
