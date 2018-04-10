@@ -58,7 +58,9 @@ else
         case {'SCP-VIDEO-01-A', 'SCP-VIDEO-01-B'}
                 DS.local.SCP_DATA_BaseDir = fullfile('C:');
                 DS.local.SCP_CODE_BaseDir = fullfile('C:', 'SCP_CODE');
-                DS.remote.SCP_DATA_BaseDir =  fullfile('Z:', 'taskcontroller');
+                %DS.remote.SCP_DATA_BaseDir =  fullfile('Z:', 'taskcontroller');
+                DS.remote.SCP_DATA_BaseDir =  fullfile('Y:');
+                
                 DS.remote.SCP_CODE_BaseDir = fullfile(DS.remote.SCP_DATA_BaseDir, 'CODE');
 
         case {'SCP-CTRL-00', 'SCP-CTRL-01B'}
