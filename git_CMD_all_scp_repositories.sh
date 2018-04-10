@@ -30,8 +30,8 @@ for CUR_SCP_REPO in ${SCP_REPOSITORY_LIST[*]} ; do
             ;;
         clone)
     	    # figure out whether we are called from AuxiliaryFunctions and cd one level down
-    	    TMP=basename $( pwd )
-    	    if ( "${TMP}" == "AuxiliaryFunctions" ) ; then
+    	    TMP_DIRNAME=$( basename $( pwd ) )
+    	    if [ "${TMP_DIRNAME}" == "AuxiliaryFunctions" ] ; then
     		echo "Running script from inside a already cloned repository, moving up one level"
     		cd ..
     	    fi
