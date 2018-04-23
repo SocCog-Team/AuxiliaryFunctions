@@ -81,6 +81,7 @@ end
 cd(CurrentDir);
 
 return
+end
 
 function [ running_in_text_mode ] = fnIsMatlabRunningInTextMode( input_args )
 %FNISMATLABRUNNINGFROMCLI is this matlab instance running as textmode
