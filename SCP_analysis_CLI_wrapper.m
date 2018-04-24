@@ -12,7 +12,13 @@ current_prefix_string = current_datetime_string;
 current_prefix_string = 'last_recent.';
 
 if (fnIsMatlabRunningInTextMode())
-    diary(fullfile(pwd, [current_prefix_string, mfilename, '.diary.txt']));
+    current_diary_fqn = fullfile(pwd, [current_prefix_string, mfilename, '.diary.txt']);
+    if exist(current_diary_fqn, 'file')
+        disp(['Deleting already existing diary file: ', current_diary_fqn]);
+        delete(current_diary_fqn);
+    end
+    disp(['Starting to log matlab output to diary file: ', current_diary_fqn]);
+    diary(current_diary_fqn);
 end
 
 % make sure everything is in the path
@@ -24,6 +30,7 @@ eval(mfile_to_run_string);
 
 % to return to the shell we need to exit/quit the current matlab instance
 if (fnIsMatlabRunningInTextMode())
+    disp(['Stopping to log matlab output to diary file: ', current_diary_fqn]);
     diary off;
     exit
 end
@@ -31,7 +38,7 @@ end
 end
 
 function [ running_in_text_mode ] = fnIsMatlabRunningInTextMode( input_args )
-%FNISMATLABRUNNINGFROMCLI is this matlab instance running as textmode
+%FNISMATLABRUNNINGINTEXTMODE is this matlab instance running as textmode
 %application
 %   Detailed explanation goes here
 
