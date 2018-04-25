@@ -17,8 +17,9 @@ if (fnIsMatlabRunningInTextMode())
         disp(['Deleting already existing diary file: ', current_diary_fqn]);
         delete(current_diary_fqn);
     end
-    disp(['Starting to log matlab output to diary file: ', current_diary_fqn]);
     diary(current_diary_fqn);
+    disp(['Starting to log matlab output to diary file: ', current_diary_fqn, ' starttime: ', current_datetime_string]);
+
 end
 
 % make sure everything is in the path
