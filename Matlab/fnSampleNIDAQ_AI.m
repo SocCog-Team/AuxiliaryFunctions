@@ -34,20 +34,22 @@ ch(4).Range = [range_min, range_max];
 output.daq_session = daq_session;
 output.ch = ch;
 
-beep;
+h = msgbox('Click the button to start sampling', 'Manual Start Control');
+uiwait(h);
+disp('Startimg sampling now...');
+%beep;
 [output.data, output.timestamps, output.triggerTime] = startForeground(daq_session);
 beep;
 pause(0.5);
 beep;
 pause(0.5);
 beep;
-
 triggertime_string = datestr(output.triggerTime, 'yyyymmddTHHMMSS.FFF');
 
 outfile_FQN = fullfile(current_path, '..', '..', ['NI_analog_in_data.', triggertime_string, '.mat']);
-
+disp('Saving data...');
 save(outfile_FQN, 'output');
-
+disp(['Sampled data saved as: ', outfile_FQN]);
 
 figure
 x_vec = output.timestamps;
