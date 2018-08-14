@@ -40,10 +40,12 @@ switch img_type(2:end)
 		%print(img_fh, '-depsc2', outfile_fqn);
 		device_str = '-depsc';
         print_options_str = '';
+        outfile_fqn = [outfile_fqn, '.eps'];
 	case {'ps', 'ps2'}
 		%print(img_fh, '-depsc2', outfile_fqn);
 		device_str = '-depsc2';
         print_options_str = '';
+        outfile_fqn = [outfile_fqn, '.eps'];
 	case {'tiff', 'tif'}
 		% tiff creates a figure
 		%print(img_fh, '-dtiff', outfile_fqn);
