@@ -49,7 +49,7 @@ if exist(fullfile(start_dir, [DS.CurrentShortHostName, '.mat'])) == 2
     end
 else
     switch host_name
-        case {'hms-beagle2', 'hms-beagle2.local', 'hms-beagle2.lan'}
+        case {'hms-beagle2', 'hms-beagle2.local', 'hms-beagle2.lan', 'hms-beagle2.intern'}
                 DS.local.SCP_DATA_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller');
                 DS.local.SCP_CODE_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller', 'CODE');
                 DS.remote.SCP_DATA_BaseDir =  fullfile('/', 'Volumes', 'social_neuroscience_data', 'taskcontroller');
