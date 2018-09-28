@@ -8,10 +8,18 @@ if ~exist('verbosity_str', 'var')
 	verbosity_str = 'verbose';
 end
 
+% check whether the path exists, create if not...
+[pathstr, name, img_type] = fileparts(outfile_fqn);
+if isempty(dir(pathstr)),
+	mkdir(pathstr);
+end
+
 % deal with r2016a changes, needs revision
 if (strcmp(version('-release'), '2016a'))
 	set(img_fh, 'PaperPositionMode', 'manual');
-	print_options_str = '-bestfit';
+    if ~ismember(img_type, {'.png', '.tiff', '.tif'})
+        print_options_str = '-bestfit';
+    end
 end
 
 if ~exist('print_options_str', 'var') || isempty(print_options_str)
@@ -23,11 +31,7 @@ resolution_str = ', ''-r600''';
 
 
 
-% check whether the path exists, create if not...
-[pathstr, name, img_type] = fileparts(outfile_fqn);
-if isempty(dir(pathstr)),
-	mkdir(pathstr);
-end
+
 
 device_str = [];
 
@@ -54,6 +58,7 @@ switch img_type(2:end)
 		% tiff creates a figure
 		%print(img_fh, '-dpng', outfile_fqn);
 		device_str = '-dpng';
+        resolution_str = ', ''-r1200''';
 	case 'eps'
 		%print(img_fh, '-depsc', '-r300', outfile_fqn);
 		device_str = '-depsc';
