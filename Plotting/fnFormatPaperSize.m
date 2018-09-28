@@ -29,7 +29,7 @@ bottom_edge_cm = 2;
 
 switch type
     
-    case 'PrimateNeurobiology2018DPZ0.5'
+    case {'PrimateNeurobiology2018DPZ0.5', 'SfN2018.5'}
         left_edge_cm = 0.05;
         bottom_edge_cm = 0.05;
         dpz_column_width_cm = 38.6 * 0.5 * 0.8;   % the columns are 38.6271mm, but the imported pdf in illustrator are too large (0.395)
