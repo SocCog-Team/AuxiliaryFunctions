@@ -5,7 +5,7 @@ Common helper functions for Matlab
 
 The quickest way to get started with the dyadic interaction platform data is to first clone this repository:
 
-0) open a (git capable*) terminal window and navigate to the directory yu want to use as the parent directory for the projects repositories
+0) open a (git capable*) terminal window and navigate to the directory you want to use as the parent directory for the projects repositories
 
 1) Execute the following command: "git clone https://github.com/SocCog-Team/AuxiliaryFunctions"
 
