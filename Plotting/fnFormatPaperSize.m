@@ -29,6 +29,20 @@ bottom_edge_cm = 2;
 
 switch type
     
+    case {'BoS_manuscript.5'}
+        left_edge_cm = 0.05;
+        bottom_edge_cm = 0.05;
+        dpz_column_width_cm = 38.6 * 0.5 * 0.8;   % the columns are 38.6271mm, but the imported pdf in illustrator are too large (0.395)
+        rect_w = (dpz_column_width_cm - 2*left_edge_cm) * fraction;
+        rect_h = ((dpz_column_width_cm * 610/987) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio
+        % configure the format PaperPositon [left bottom width height]
+        if (do_center_in_paper)
+            left_edge_cm = (A4_w_cm - rect_w) * 0.5;
+            bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
+        end
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+        
     case {'PrimateNeurobiology2018DPZ0.5', 'SfN2018.5'}
         left_edge_cm = 0.05;
         bottom_edge_cm = 0.05;
@@ -42,9 +56,7 @@ switch type
         end
         output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
         set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
- 
-
-    
+     
    case 'PrimateNeurobiology2018DPZ'
         left_edge_cm = 0.05;
         bottom_edge_cm = 0.05;
@@ -72,7 +84,6 @@ switch type
         end
         output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
         set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
- 
     
     case '16to9portrait'
         left_edge_cm = 1;
