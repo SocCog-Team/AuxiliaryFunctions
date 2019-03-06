@@ -5,6 +5,8 @@ function [ ] = fnFormatDefaultAxes( type )
 %   type is simple a unique string to select the requested set
 % 20070827sm: changed default output formatting to allow pretty paper output
 switch type
+    case 'PNM2019'
+        set(0, 'DefaultAxesLineWidth', 0.5, 'DefaultAxesFontName', 'Arial', 'DefaultAxesFontSize', 12, 'DefaultAxesFontWeight', 'normal');
     case 'BoS_manuscript'
         set(0, 'DefaultAxesLineWidth', 0.5, 'DefaultAxesFontName', 'Arial', 'DefaultAxesFontSize', 6, 'DefaultAxesFontWeight', 'normal');
     case 'SfN2018'
