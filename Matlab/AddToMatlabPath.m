@@ -1,7 +1,7 @@
 function [ output_args ] = AddToMatlabPath( FullyQualifiedDirectoryToAdd, MfileToRun, MfileToOpen )
-%ADDTOMATLABPATH Add the current or given path including its sub-folders 
+%ADDTOMATLABPATH Add the current or given path including its sub-folders
 %temporarily to the matlab path.
-%		
+%
 % AddToMatlabPath( FullyQualifiedDirectoryToAdd, MfileToRun, MfileToOpen )
 % FullyQualifiedDirectoryToAdd: if not empty add the directory tree
 % starting at that directory to the matlab path, otherwise take the current
@@ -91,7 +91,7 @@ function [ running_in_text_mode ] = fnIsMatlabRunningInTextMode( input_args )
 running_in_text_mode = 0;
 
 if (~usejava('awt'))
-    running_in_text_mode = 1;
+	running_in_text_mode = 1;
 end
 
 return
