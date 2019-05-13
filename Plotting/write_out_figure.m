@@ -17,9 +17,9 @@ end
 % deal with r2016a changes, needs revision
 if (strcmp(version('-release'), '2016a'))
 	set(img_fh, 'PaperPositionMode', 'manual');
-    if ~ismember(img_type, {'.png', '.tiff', '.tif'})
-        print_options_str = '-bestfit';
-    end
+	if ~ismember(img_type, {'.png', '.tiff', '.tif'})
+		print_options_str = '-bestfit';
+	end
 end
 
 if ~exist('print_options_str', 'var') || isempty(print_options_str)
@@ -43,13 +43,13 @@ switch img_type(2:end)
 	case 'ps3'
 		%print(img_fh, '-depsc2', outfile_fqn);
 		device_str = '-depsc';
-        print_options_str = '';
-        outfile_fqn = [outfile_fqn, '.eps'];
+		print_options_str = '';
+		outfile_fqn = [outfile_fqn, '.eps'];
 	case {'ps', 'ps2'}
 		%print(img_fh, '-depsc2', outfile_fqn);
 		device_str = '-depsc2';
-        print_options_str = '';
-        outfile_fqn = [outfile_fqn, '.eps'];
+		print_options_str = '';
+		outfile_fqn = [outfile_fqn, '.eps'];
 	case {'tiff', 'tif'}
 		% tiff creates a figure
 		%print(img_fh, '-dtiff', outfile_fqn);
@@ -58,7 +58,7 @@ switch img_type(2:end)
 		% tiff creates a figure
 		%print(img_fh, '-dpng', outfile_fqn);
 		device_str = '-dpng';
-        resolution_str = ', ''-r1200''';
+		resolution_str = ', ''-r1200''';
 	case 'eps'
 		%print(img_fh, '-depsc', '-r300', outfile_fqn);
 		device_str = '-depsc';
