@@ -6,7 +6,7 @@ function [ running_in_text_mode ] = fnIsMatlabRunningInTextMode( input_args )
 running_in_text_mode = 0;
 
 if (~usejava('awt'))
-    running_in_text_mode = 1;
+	running_in_text_mode = 1;
 end
 
 return
