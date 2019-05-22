@@ -1,7 +1,10 @@
 #! /bin/bash
 
 MATLAB_INVOCATION="matlab -r"
-MATLAB_CMD_STRING="subject_bias_analysis_sm01()"
+# command line only
+MATLAB_INVOCATION="matlab -nojvm -nodisplay -nosplash -r"
+
+MATLAB_CMD_STRING="subject_bias_analysis_sm01(0)"
 CALLINGDIR=$( pwd )
 
 
