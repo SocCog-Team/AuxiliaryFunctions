@@ -11,6 +11,8 @@ current_prefix_string = current_datetime_string;
 % otherwise use the following
 current_prefix_string = 'last_recent.';
 
+%disp(['mfile_to_run_string: ', mfile_to_run_string]);
+
 if (fnIsMatlabRunningInTextMode())
     current_diary_fqn = fullfile(pwd, [current_prefix_string, mfilename, '.diary.txt']);
     if exist(current_diary_fqn, 'file')
