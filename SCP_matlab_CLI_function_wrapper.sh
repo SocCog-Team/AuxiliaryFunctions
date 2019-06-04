@@ -1,8 +1,8 @@
 #! /bin/bash
 
 MATLAB_INVOCATION="matlab -r"
-# command line only
-MATLAB_INVOCATION="matlab -nojvm -nodisplay -nosplash -r"
+# command line only, -nojvm will not allow to create figures...
+MATLAB_INVOCATION="matlab -nodisplay -nosplash -r"
 
 MATLAB_CMD_STRING="subject_bias_analysis_sm01(0)"
 CALLINGDIR=$( pwd )
