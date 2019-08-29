@@ -29,7 +29,113 @@ bottom_edge_cm = 2;
 
 switch type
     
-    case {'BoS_manuscript.5'}
+	case {'Plos'}
+		% golden ratio
+        left_edge_cm = 0.05;
+        bottom_edge_cm = 0.05;
+		plos_column_width_cm = 19.05;
+		plos_column_height_cm = 22.23;	
+		
+        rect_w = (plos_column_width_cm - 2*left_edge_cm) * fraction;
+        rect_h = ((plos_column_width_cm * 610/987) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio
+        %rect_h = ((plos_column_height_cm) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio		
+        % configure the format PaperPositon [left bottom width height]
+        if (do_center_in_paper)
+            left_edge_cm = (A4_w_cm - rect_w) * 0.5;
+            bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
+        end
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+
+	case {'Plos_text_col'}
+		% golden ratio
+        left_edge_cm = 0.05;
+        bottom_edge_cm = 0.05;
+		plos_column_width_cm = 13.2;
+		plos_column_height_cm = 22.23;	
+		
+        rect_w = (plos_column_width_cm - 2*left_edge_cm) * fraction;
+        rect_h = ((plos_column_width_cm * 610/987) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio
+        %rect_h = ((plos_column_height_cm) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio		
+        % configure the format PaperPositon [left bottom width height]
+        if (do_center_in_paper)
+            left_edge_cm = (A4_w_cm - rect_w) * 0.5;
+            bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
+        end
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');	
+	
+	case {'Plos_max'}
+        left_edge_cm = 0.05;
+        bottom_edge_cm = 0.05;
+		plos_column_width_cm = 19.05;
+		plos_column_height_cm = 22.23;	
+		
+        rect_w = (plos_column_width_cm - 2*left_edge_cm) * fraction;
+        rect_h = ((plos_column_height_cm) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio		
+        % configure the format PaperPositon [left bottom width height]
+        if (do_center_in_paper)
+            left_edge_cm = (A4_w_cm - rect_w) * 0.5;
+            bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
+        end
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+
+	case {'Plos_half_page'}
+        left_edge_cm = 0.05;
+        bottom_edge_cm = 0.05;
+		
+		plos_column_width_cm = 19.05;
+		plos_column_height_cm = 22.23*0.5;	
+		
+        rect_w = (plos_column_width_cm - 2*left_edge_cm) * fraction;
+        rect_h = ((plos_column_height_cm) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio		
+        % configure the format PaperPositon [left bottom width height]
+        if (do_center_in_paper)
+            left_edge_cm = (A4_w_cm - rect_w) * 0.5;
+            bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
+        end
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+
+	case {'Plos_max_column'}
+        left_edge_cm = 0.05;
+        bottom_edge_cm = 0.05;
+		
+		plos_column_width_cm = 13.2;
+		plos_column_height_cm = 22.23;	
+		
+        rect_w = (plos_column_width_cm - 2*left_edge_cm) * fraction;
+        rect_h = ((plos_column_height_cm) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio		
+        % configure the format PaperPositon [left bottom width height]
+        if (do_center_in_paper)
+            left_edge_cm = (A4_w_cm - rect_w) * 0.5;
+            bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
+        end
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+		
+	case {'Plos_half_column'}
+        left_edge_cm = 0.05;
+        bottom_edge_cm = 0.05;
+		
+		plos_column_width_cm = 13.2;
+		plos_column_height_cm = 22.23*0.5;	
+		
+        rect_w = (plos_column_width_cm - 2*left_edge_cm) * fraction;
+        rect_h = ((plos_column_height_cm) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio		
+        % configure the format PaperPositon [left bottom width height]
+        if (do_center_in_paper)
+            left_edge_cm = (A4_w_cm - rect_w) * 0.5;
+            bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
+        end
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+				
+		
+		
+	
+	case {'BoS_manuscript.5'}
         left_edge_cm = 0.05;
         bottom_edge_cm = 0.05;
         dpz_column_width_cm = 38.6 * 0.5 * 0.8;   % the columns are 38.6271mm, but the imported pdf in illustrator are too large (0.395)
