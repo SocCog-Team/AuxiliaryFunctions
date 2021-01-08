@@ -14,7 +14,7 @@ fi
 # prepend this in front of the SCP_REPOSITORY names to create the link for cloning
 SCP_GITHUB_BASE_URL="https://github.com/SocCog-Team/"
 
-SCP_REPOSITORY_LIST=( AuxiliaryFunctions SessionDataAnalysis eyetrackerDataAnalysis LogFileAnalysis coordination_testing Multiple-Cameras-Acquisition Project_Sandbox)
+SCP_REPOSITORY_LIST=( AuxiliaryFunctions SessionDataAnalysis eyetrackerDataAnalysis LogFileAnalysis coordination_testing Multiple-Cameras-Acquisition Project_Sandbox Ephys)
 CALLING_DIR=$( pwd )
 
 for CUR_SCP_REPO in ${SCP_REPOSITORY_LIST[*]} ; do

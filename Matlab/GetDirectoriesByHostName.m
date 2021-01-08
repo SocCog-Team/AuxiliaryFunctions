@@ -54,29 +54,35 @@ else
 			DS.local.SCP_CODE_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller', 'CODE');
 			DS.remote.SCP_DATA_BaseDir =  fullfile('/', 'Volumes', 'social_neuroscience_data', 'taskcontroller');
 			DS.remote.SCP_CODE_BaseDir = fullfile(DS.remote.SCP_DATA_BaseDir, 'CODE');
-			
+
+            DS.local.SCP_DATA_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller', 'SCP_DATA');
+			DS.local.SCP_CODE_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller', 'SCP_CODE');
+			DS.remote.SCP_DATA_BaseDir =  fullfile('/', 'Volumes', 'taskcontroller$', 'SCP_DATA');
+			DS.remote.SCP_CODE_BaseDir = fullfile('/', 'Volumes', 'taskcontroller$', 'SCP_CODE');
+
+            
 		case {'SCP-VIDEO-01-A', 'SCP-VIDEO-01-B'}
 			DS.local.SCP_DATA_BaseDir = fullfile('C:');
 			DS.local.SCP_CODE_BaseDir = fullfile('C:', 'SCP_CODE');
 			%DS.remote.SCP_DATA_BaseDir =  fullfile('Z:', 'taskcontroller');
 			DS.remote.SCP_DATA_BaseDir =  fullfile('Y:');
 			
-			DS.remote.SCP_CODE_BaseDir = fullfile(DS.remote.SCP_DATA_BaseDir, 'CODE');
+			DS.remote.SCP_CODE_BaseDir = fullfile(DS.remote.SCP_DATA_BaseDir, 'SCP_CODE');
 			
 		case {'SCP-CTRL-00', 'SCP-CTRL-01B'}
 			DS.local.SCP_DATA_BaseDir = fullfile('C:');
 			DS.local.SCP_CODE_BaseDir = fullfile('C:', 'SCP_CODE');
 			DS.remote.SCP_DATA_BaseDir =  fullfile('Z:', 'taskcontroller');
-			DS.remote.SCP_CODE_BaseDir = fullfile(DS.remote.SCP_DATA_BaseDir, 'CODE');
+			DS.remote.SCP_CODE_BaseDir = fullfile(DS.remote.SCP_DATA_BaseDir, 'SCP_CODE');
 			
 		otherwise
 			disp(['Hostname ', host_name, ' not handeled yet']);
 			disp(['Either add a case statement for ', host_name, ' to GetDirectoriesByHostName.m ']);
 			disp(['or create ', [host_name, '.mat'], ' with the following fields:']);
-			disp(['local.SCP_DATA_BaseDir: the fully qualified path to the local parent directory of the SCP_DATA directory']);
-			disp(['remote.SCP_DATA_BaseDir: the fully qualified path to the remote parent directory of the SCP_DATA directory']);
-			disp(['local.SCP_CODE_BaseDir: the fully qualified path to the local parent directory of the SCP Code directory']);
-			disp(['remote.SCP_CODE_BaseDir: the fully qualified path to the remote parent directory of the SCP Code directory']);
+			disp(['local.SCP_DATA_BaseDir: the fully qualified path to the local SCP_DATA directory']);
+            disp(['local.SCP_CODE_BaseDir: the fully qualified path to the local SCP_CODE directory']);
+			disp(['remote.SCP_DATA_BaseDir: the fully qualified path to the remote SCP_DATA directory']);
+			disp(['remote.SCP_CODE_BaseDir: the fully qualified path to the remote SCP_CODE directory']);
 			disp('');
 			disp('Please use the GUI to select the requested directories.');
 			[local, remote] = fn_select_basedirs( start_dir );
@@ -147,13 +153,17 @@ function [ local, remote ] = fn_select_basedirs( start_dir )
 feature('UseOldFileDialogs',1);
 
 % the local folders
-local.SCP_CODE_BaseDir = uigetdir(fullfile(start_dir, '..', '..'), 'Please select the local SCP CODE base directory.');
-local.SCP_DATA_BaseDir = uigetdir(fullfile(start_dir, '..', '..', '..'), 'Please select the local SCP DATA base directory.');
+disp('Please select the local SCP_CODE.');
+local.SCP_CODE_BaseDir = uigetdir(fullfile(start_dir, '..', '..'), 'Please select the local SCP_CODE base directory.');
+disp('Please select the local SCP_DATA.');
+local.SCP_DATA_BaseDir = uigetdir(fullfile(start_dir, '..', '..', '..'), 'Please select the local SCP_DATA base directory.');
 
 % the remote directories
 msgbox('Make sure to mount the server share containing the remote SCP_DATA directory before proceeding.');
-remote.SCP_CODE_BaseDir = uigetdir(fullfile(start_dir, '..', '..'), 'Please select the remote SCP CODE base directory.');
-remote.SCP_DATA_BaseDir = uigetdir(fullfile(start_dir, '..', '..', '..'), 'Please select the remote SCP DATA base directory.');
+disp('Please select the remote SCP_CODE.');
+remote.SCP_CODE_BaseDir = uigetdir(fullfile(start_dir, '..', '..'), 'Please select the remote SCP_CODE base directory.');
+disp('Please select the remote SCP_DATA.');
+remote.SCP_DATA_BaseDir = uigetdir(fullfile(start_dir, '..', '..', '..'), 'Please select the remote SCP_DATA base directory.');
 
 return
 end

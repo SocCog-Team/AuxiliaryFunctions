@@ -1,4 +1,4 @@
-function [ output_rect ] = fnFormatPaperSize( type, gcf_h, fraction, do_center_in_paper )
+function [ output_rect ] = fnFormatPaperSize( type, gcf_h, fraction, do_center_in_paper, aspect_ratio_height_by_width )
 %FNFORMATPAPERSIZE Set the paper size for a plot, also return a reasonably
 %tight output_rect.
 % 20070827sm: changed default output formatting to allow pretty paper output
@@ -12,7 +12,7 @@ function [ output_rect ] = fnFormatPaperSize( type, gcf_h, fraction, do_center_i
 if nargin < 3
     fraction = 1;	% fractional columns?
 end
-if nargin < 4
+if nargin < 4 || isempty(do_center_in_paper)
     do_center_in_paper = 0;	% center the rectangle in the page
 end
 
@@ -20,6 +20,9 @@ end
 nature_single_col_width_cm = 8.9;
 nature_double_col_width_cm = 18.3;
 nature_full_page_width_cm = 24.7;
+
+cm2inch_factor = 1/2.54;
+inch2cm_factor = 2.54;
 
 A4_w_cm = 21.0;
 A4_h_cm = 29.7;
@@ -29,6 +32,38 @@ bottom_edge_cm = 2;
 
 switch type
     
+	case {'SciAdv'}
+		inch2cm = inch2cm_factor;
+		% golden ratio
+        left_edge_cm = 0.05;
+        bottom_edge_cm = 0.05;
+		SciAdv_column_width_cm = 7.3 * inch2cm;	% 1col: 3.5", 1.5col: 5.0", 2col: 7.3"
+		SciAdv_column_height_cm = 9.0 * inch2cm;	% full page: ~9.0"	
+		
+        rect_w = (SciAdv_column_width_cm - 2*left_edge_cm) * fraction;
+        rect_h = ((SciAdv_column_width_cm * 610/987) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio
+		rect_h = rect_w / 3;	% try 1:3 aspect ratio
+		
+		if exist('aspect_ratio_height_by_width', 'var') && ~isempty(aspect_ratio_height_by_width)
+			rect_h = rect_w * aspect_ratio_height_by_width;
+			if (rect_h > SciAdv_column_height_cm)
+				error('Requested aspect_ratio_height_by_width resulting in invalid total height.');
+			end
+		end
+		
+        %rect_h = ((plos_column_height_cm) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio		
+        % configure the format PaperPositon [left bottom width height]
+        if (do_center_in_paper)
+            left_edge_cm = (A4_w_cm - rect_w) * 0.5;
+            bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
+        end
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        %set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+		% old matlab does not handle cm very well, so pretend we do inches
+		output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h] * cm2inch_factor;	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [(rect_w+2*left_edge_cm*fraction)*cm2inch_factor (rect_h+2*bottom_edge_cm*fraction)*cm2inch_factor], 'PaperOrientation', 'portrait', 'PaperUnits', 'inches');
+
+	
 	case {'Plos'}
 		% golden ratio
         left_edge_cm = 0.05;
@@ -168,19 +203,36 @@ switch type
         set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
         
     case {'PrimateNeurobiology2018DPZ0.5', 'SfN2018.5'}
-        left_edge_cm = 0.05;
-        bottom_edge_cm = 0.05;
+        inch2cm = inch2cm_factor;
         dpz_column_width_cm = 38.6 * 0.5 * 0.8;   % the columns are 38.6271mm, but the imported pdf in illustrator are too large (0.395)
+        dpz_column_height_cm = 38.6 * 0.5 * 0.8;   % the columns are 38.6271mm, but the imported pdf in illustrator are too large (0.395)
+		
         rect_w = (dpz_column_width_cm - 2*left_edge_cm) * fraction;
         rect_h = ((dpz_column_width_cm * 610/987) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio
+		%rect_h = rect_w / 2;	% try 1:3 aspect ratio
+
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+     
+		if exist('aspect_ratio_height_by_width', 'var') && ~isempty(aspect_ratio_height_by_width)
+			rect_h = rect_w * aspect_ratio_height_by_width;
+			if (rect_h > dpz_column_height_cm)
+				error('Requested aspect_ratio_height_by_width resulting in invalid total height.');
+			end
+		end
+		
+        %rect_h = ((plos_column_height_cm) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio		
         % configure the format PaperPositon [left bottom width height]
         if (do_center_in_paper)
             left_edge_cm = (A4_w_cm - rect_w) * 0.5;
             bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
         end
         output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
-        set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
-     
+        %set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+		% old matlab does not handle cm very well, so pretend we do inches
+		output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h] * cm2inch_factor;	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [(rect_w+2*left_edge_cm*fraction)*cm2inch_factor (rect_h+2*bottom_edge_cm*fraction)*cm2inch_factor], 'PaperOrientation', 'portrait', 'PaperUnits', 'inches');
+
    case 'PrimateNeurobiology2018DPZ'
         left_edge_cm = 0.05;
         bottom_edge_cm = 0.05;
