@@ -39,6 +39,17 @@ for CUR_SCP_REPO in ${SCP_REPOSITORY_LIST[*]} ; do
     	    echo ${CURRENT_GIT_COMMANDLINE}
     	    ${CURRENT_GIT_COMMANDLINE}
     	    ;;
+        sshclone)
+    	    # figure out whether we are called from AuxiliaryFunctions and cd one level down
+    	    TMP_DIRNAME=$( basename $( pwd ) )
+    	    if [ "${TMP_DIRNAME}" == "AuxiliaryFunctions" ] ; then
+    		echo "Running script from inside a already cloned repository, moving up one level"
+    		cd ..
+    	    fi
+    	    CURRENT_GIT_COMMANDLINE="git clone git@github.com:SocCog-Team/${CUR_SCP_REPO}.git"
+    	    echo ${CURRENT_GIT_COMMANDLINE}
+    	    ${CURRENT_GIT_COMMANDLINE}
+    	    ;;
     	*)
     	    echo "Git command ${GITCOMMAND} not handled yet, might this be a typo?"
     	    ;;
