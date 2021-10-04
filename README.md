@@ -7,9 +7,9 @@ The quickest way to get started with the dyadic interaction platform data is to 
 
 0) open a (git capable*) terminal window and navigate (cd) to the directory you want to use as the parent directory for the projects repositories
 
-1.a) Execute the following command: "git clone https://github.com/SocCog-Team/AuxiliaryFunctions"
+1) A) Execute the following command: "git clone https://github.com/SocCog-Team/AuxiliaryFunctions"
   
-1.b) Since 2021 for ssh access use:"git clone git@github.com:SocCog-Team/AuxiliaryFunctions.git"
+1) B) Since 2021 for ssh access use:"git clone git@github.com:SocCog-Team/AuxiliaryFunctions.git"
 
 2) Navigate (cd) in the new AuxiliaryFunctions subdiretory: e.g. "cd ./AuxiliaryFunctions" 
 
