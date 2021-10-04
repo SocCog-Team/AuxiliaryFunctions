@@ -15,7 +15,8 @@ if isempty(dir(pathstr)),
 end
 
 % deal with r2016a changes, needs revision
-if (strcmp(version('-release'), '2016a'))
+#if (strcmp(version('-release'), '2016a'))
+if (ismember(version('-release'), {'2016a', '2019a', '2019b'}))
 	set(img_fh, 'PaperPositionMode', 'manual');
 	if ~ismember(img_type, {'.png', '.tiff', '.tif'})
 		print_options_str = '-bestfit';
