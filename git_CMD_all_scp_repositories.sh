@@ -13,8 +13,11 @@ fi
 
 # prepend this in front of the SCP_REPOSITORY names to create the link for cloning
 SCP_GITHUB_BASE_URL="https://github.com/SocCog-Team/"
+# for ssh access use for cloning
+#SCP_GITHUB_BASE_URL="git@github.com:SocCog-Team/"
 
-SCP_REPOSITORY_LIST=( AuxiliaryFunctions SessionDataAnalysis eyetrackerDataAnalysis LogFileAnalysis coordination_testing Multiple-Cameras-Acquisition Project_Sandbox Ephys)
+
+SCP_REPOSITORY_LIST=( "AuxiliaryFunctions" "SessionDataAnalysis" eyetrackerDataAnalysis LogFileAnalysis coordination_testing Multiple-Cameras-Acquisition Project_Sandbox Ephys fieldtrip)
 CALLING_DIR=$( pwd )
 
 for CUR_SCP_REPO in ${SCP_REPOSITORY_LIST[*]} ; do

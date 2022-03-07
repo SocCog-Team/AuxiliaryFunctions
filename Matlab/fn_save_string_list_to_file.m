@@ -26,13 +26,13 @@ if isa(file_handle, 'double')
 else
 	if isstr(file_handle)
 		file_handle_is_filename = 1;
-		error('Handling of filenmaes not implemented yet');
+		error('Handling of filenames not implemented yet');
 		[current_file_handle, errmsg] = fopen(file_handle, 'w', 'n', 'UTF-8');
 		if (current_file_handle == -1)
 			error(errmsg);
 		end
 	else
-		disp('File handle neiter double nor string, nothing to do');
+		disp('File handle neither double nor string, nothing to do');
 		return
 	end
 end	
