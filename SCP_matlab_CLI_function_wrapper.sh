@@ -14,4 +14,3 @@ ${MATLAB_INVOCATION} "cd('${CALLINGDIR}'); SCP_analysis_CLI_wrapper('${MATLAB_CM
 
 
 exit 0
-

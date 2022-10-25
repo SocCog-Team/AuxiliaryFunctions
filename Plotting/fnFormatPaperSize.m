@@ -47,7 +47,7 @@ switch type
 		if exist('aspect_ratio_height_by_width', 'var') && ~isempty(aspect_ratio_height_by_width)
 			rect_h = rect_w * aspect_ratio_height_by_width;
 			if (rect_h > SciAdv_column_height_cm)
-				error('Requested aspect_ratio_height_by_width resulting in invalid total height.');
+				disp('Requested aspect_ratio_height_by_width resulting in invalid total height.');
 			end
 		end
 		
@@ -63,6 +63,38 @@ switch type
 		output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h] * cm2inch_factor;	% left, bottom, width, height
         set(gcf_h, 'PaperSize', [(rect_w+2*left_edge_cm*fraction)*cm2inch_factor (rect_h+2*bottom_edge_cm*fraction)*cm2inch_factor], 'PaperOrientation', 'portrait', 'PaperUnits', 'inches');
 
+	case {'SciAdv_single'}
+		inch2cm = inch2cm_factor;
+		% golden ratio
+        left_edge_cm = 0.05;
+        bottom_edge_cm = 0.05;
+		SciAdv_column_width_cm = 7.3 * inch2cm;	% 1col: 3.5", 1.5col: 5.0", 2col: 7.3"
+		SciAdv_column_height_cm = 9.0 * inch2cm;	% full page: ~9.0"	
+		% go for thirds here
+		SciAdv_column_width_cm = SciAdv_column_width_cm / 2;
+        rect_w = (SciAdv_column_width_cm - 2*left_edge_cm) * fraction;
+        rect_h = ((SciAdv_column_width_cm * 610/987) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio
+		rect_h = rect_w / 3;	% try 1:3 aspect ratio
+		rect_h = rect_w * 1.0;	% try 1:3 aspect ratio
+		
+		if exist('aspect_ratio_height_by_width', 'var') && ~isempty(aspect_ratio_height_by_width)
+			rect_h = rect_w * aspect_ratio_height_by_width;
+			if (rect_h > SciAdv_column_height_cm)
+				disp('Requested aspect_ratio_height_by_width resulting in invalid total height.');
+			end
+		end
+		
+        %rect_h = ((plos_column_height_cm) - 2*bottom_edge_cm) * fraction; % 610/987 approximates the golden ratio		
+        % configure the format PaperPositon [left bottom width height]
+        if (do_center_in_paper)
+            left_edge_cm = (A4_w_cm - rect_w) * 0.5;
+            bottom_edge_cm = (A4_h_cm - rect_h) * 0.5;
+        end
+        output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h];	% left, bottom, width, height
+        %set(gcf_h, 'PaperSize', [rect_w+2*left_edge_cm*fraction rect_h+2*bottom_edge_cm*fraction], 'PaperOrientation', 'portrait', 'PaperUnits', 'centimeters');
+		% old matlab does not handle cm very well, so pretend we do inches
+		output_rect = [left_edge_cm bottom_edge_cm rect_w rect_h] * cm2inch_factor;	% left, bottom, width, height
+        set(gcf_h, 'PaperSize', [(rect_w+2*left_edge_cm*fraction)*cm2inch_factor (rect_h+2*bottom_edge_cm*fraction)*cm2inch_factor], 'PaperOrientation', 'portrait', 'PaperUnits', 'inches');
 		
 
 	case {'SfN2018.5'}

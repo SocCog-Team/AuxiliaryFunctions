@@ -26,11 +26,14 @@ AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'LogFileAnalysis'), [], full
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'SessionDataAnalysis'), [], fullfile(SCPDirs.SCP_CODE_BaseDir, 'SessionDataAnalysis', 'subject_bias_analysis_sm01.m') );
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'eyetrackerDataAnalysis'), [], [] );
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'coordination_testing'), [], [] );
+
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'Ephys'), [], fullfile(SCPDirs.SCP_CODE_BaseDir, 'Ephys', 'analysis_code', 'SCP_ephys_base_analysis.m') );
 %AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'fieldtrip'), [], []); %fieldtrip should not be included like that, as requires a special dance, see/call Ephys/start_fieldtrip.m
 %AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'LFP_timefrequency_analysis'), [], []); % see/call Ephys/start_LFP_timefrequency_analysis.m
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'External_modified'), [], []); 
 
+AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'gramm'), [], [] );
+AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'Violinplot-Matlab'), [], [] ); 
 
 cd(CurrentDir);
 return
