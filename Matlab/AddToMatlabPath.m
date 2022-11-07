@@ -31,6 +31,8 @@ if ~exist('MfileToOpen', 'var') || isempty(MfileToOpen) || fnIsMatlabRunningInTe
 	MfileToOpen = [];
 end
 
+
+if isfolder(FullyQualifiedDirectoryToAdd)
 cd(FullyQualifiedDirectoryToAdd);
 CurrentMatlabPath = path;
 
@@ -55,6 +57,12 @@ end
 % now add them again
 disp([mfilename, ': Adding ', FullyQualifiedDirectoryToAdd, ' and subdirectories temporarily to matlab path.']);
 addpath(genpath(pwd()));
+
+else
+	disp(['WARNING: Requested folder (', FullyQualifiedDirectoryToAdd, ' does not exist, skipping']);
+end
+
+
 
 % remove .git folders to keep the matlab path reasonable
 CurrentMatlabPath = path;
