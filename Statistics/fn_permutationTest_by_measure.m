@@ -1,4 +1,4 @@
-% [p, observeddifference, effectsize] = permutationTest(sample1, sample2, permutations [, varargin])
+% [p, observeddifference, effectsize] = fn_permutationTest_by_measure(sample1, sample2, permutations [, varargin])
 %
 %       Permutation test (aka randomisation test), testing for a difference
 %       in means between two samples. 
@@ -87,7 +87,7 @@
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-function [p, observeddifference, effectsize] = permutationTest(sample1, sample2, permutations, varargin)
+function [p, observeddifference, effectsize] = fn_permutationTest_by_measure(sample1, sample2, permutations, varargin)
 
 % parsing input
 p = inputParser;
@@ -100,7 +100,7 @@ addParamValue(p, 'sidedness', 'both', @(x) any(validatestring(x,{'both', 'smalle
 addParamValue(p, 'exact' , 0, @isnumeric);
 addParamValue(p, 'plotresult', 0, @isnumeric);
 addParamValue(p, 'showprogress', 0, @isnumeric);
-addParamValue(p, 'measure', 'meandifference', @(x) any(validatestring(x,{'meandifference', 'ranksum'})));
+addParamValue(p, 'measure', 'meandifference', @(y) any(validatestring(y, {'meandifference', 'ranksum'})));
 
 
 parse(p, sample1, sample2, permutations, varargin{:})
@@ -112,7 +112,7 @@ sidedness = p.Results.sidedness;
 exact = p.Results.exact;
 plotresult = p.Results.plotresult;
 showprogress = p.Results.showprogress;
-measure = p.Results.measure
+measure = p.Results.measure;
 
 
 % enforcing row vectors
@@ -122,16 +122,16 @@ if iscolumn(sample2), sample2 = sample2'; end
 allobservations = [sample1, sample2];
 
 switch measure
-    case 'meandifference'
-	observeddifference = nanmean(sample1) - nanmean(sample2);
-	pooledstd = sqrt(  ( (numel(sample1)-1)*std(sample1)^2 + (numel(sample2)-1)*std(sample2)^2 )  /  ( numel(allobservations)-2 )  );
-	effectsize = observeddifference / pooledstd;
-    case 'ranksum'
-	observeddifference = ranksum_stats.ranksum;
-	[~, ~, ranksum_stats] = ranksum(sample1, sample2, 'method', 'exact');
-	[~, ~, ranksum_stats] = ranksum(sample1, sample2, 'method', 'approximate');
-	pooledstd = NaN;
-	effectsize = ranksum_stats.zval / sqrt((sum(~isnan(sample1)) + sum(~isnana(sample2))));
+	case 'meandifference'
+		observeddifference = nanmean(sample1) - nanmean(sample2);
+		pooledstd = sqrt(  ( (numel(sample1)-1)*std(sample1)^2 + (numel(sample2)-1)*std(sample2)^2 )  /  ( numel(allobservations)-2 )  );
+		effectsize = observeddifference / pooledstd;
+	case 'ranksum'
+		[~, ~, ranksum_stats] = ranksum(sample1, sample2, 'method', 'exact');
+		observeddifference = ranksum_stats.ranksum;
+		[~, ~, ranksum_stats] = ranksum(sample1, sample2, 'method', 'approximate');
+		pooledstd = NaN;
+		effectsize = ranksum_stats.zval / sqrt((sum(~isnan(sample1)) + sum(~isnan(sample2))));
 end
 
 w = warning('off', 'MATLAB:nchoosek:LargeCoefficient');
@@ -165,13 +165,23 @@ for n = 1:permutations
     randomSample2 = allobservations(permutation(length(sample1)+1:length(permutation)));
     
     % saving differences between the two samples
-    switch measure
-	case 'meandifference'
-	    randomdifferences(n) = nanmean(randomSample1) - nanmean(randomSample2);
-	case 'ranksum'
-	    [~, ~, ranksum_stats] = ranksum(randomsample1, randomsample2, 'method', 'exact');
-	    randomdifferences(n) = ranksum_stat.ranksum;
-    end
+	switch measure
+		case 'meandifference'
+			randomdifferences(n) = nanmean(randomSample1) - nanmean(randomSample2);
+		case 'ranksum'
+			% the exact ranksum test is pretty slow, see whether the approximte one is fast enough 
+			[~, ~, ranksum_stats] = ranksum(randomSample1, randomSample2, 'method', 'approximate');
+			randomdifferences(n) = ranksum_stats.ranksum;
+			% or calculate the test statistik by hand
+% 			r = avrRank([randomSample1, randomSample2]);
+% 			n1 = length(randomSample1);
+% 			n2 = length(randomSample2);
+% 			R1 = sum(r(1:n1));
+% 			R2 = sum(r(n1+1:end));
+% 			U1 = R1 - ((n1*(n1+1))/(2));
+% 			U2 = (n1 * n2) - U1;
+% 			randomdifferences(n) = min([U1, U2]);
+	end
 end
 if showprogress, delete(w); end
 
@@ -201,4 +211,56 @@ if plotresult
     legend(od);
 end
 
+end
+
+
+function r = avrRank( x )
+%AVRRANK Returns the sample ranks of the values in a vector. In case of ties
+% (i.e., equal values) and missing values it computes their average rank.
+%  
+% INPUT:
+%  x - any row or column vector, may be integer, character
+%      or floating point. 
+%
+% OUTPUT:
+%  r - vector of corresponding ranks for each element in x tied elements
+%      are given an average rank for all tied elements.
+%      
+% SEE ALSO:
+%  * rankt - package at 
+%          http://www.mathworks.com/matlabcentral/fileexchange/27701-rankt
+%  * FractionalRankings from Rankings toolbox
+%          http://www.mathworks.com/matlabcentral/fileexchange/19496 
+%  * tiedrank from MATLAB Statistics Toolbox
+%  * rank function in EXCEL
+%  * rank function in R language
+%
+% EXAMPLE:
+% x = round(rand(1,10)*5);
+% r = avrrank(x);
+% disp([x;r])
+%     3	  5    2	 1	 5	 0	 3	 2	 5	 0
+%    6.5 9.0	4.5	3.0	9.0	1.5	6.5	4.5	9.0	1.5	
+%
+% Written by Jarek Tuszynski, SAIC, jaroslaw.w.tuszynski_at_saic.com
+% Code covered by BSD License
+%% Sort and create ranks array
+[sx, sortidx] = sort(x(:));
+nNaN  = sum(isnan(x));                 % number of NAN's in the array
+nx    = numel(x) - nNaN;               % length of x without NAN's
+ranks = [1:nx NaN(1,nNaN)]';           % push NAN's to the end
+%% Adjust for ties by averaging their ranks
+pos = 1;
+while pos<nx
+  while (pos<nx && sx(pos)~=sx(pos+1)), pos=pos+1; end 
+  tieStart = pos;   % search until next tie is found
+  while (pos<nx && sx(pos)==sx(pos+1)), pos=pos+1; end
+  tieEnd   = pos;   % end of sequence of ties is found
+  idx = tieStart : tieEnd;
+  ranks(idx) = mean(ranks(idx)); % replace ranks with average ranks
+end
+%% Prepare output
+r(sortidx) = ranks;
+r = reshape(r,size(x));                % reshape to match input
+return 
 end
