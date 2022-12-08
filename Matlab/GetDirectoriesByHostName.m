@@ -15,7 +15,8 @@ DirectoriesStruct = struct();
 
 % DEFAULT TO USING THE SERVER
 if ~exist('override_directive', 'var')
-	override_directive = 'remote';
+	override_directive = 'local_code';
+	disp([mfilename, ': no override_directive specified, defaulting to ', override_directive]);
 end
 
 
@@ -50,30 +51,22 @@ if exist(fullfile(start_dir, [DS.CurrentShortHostName, '.mat'])) == 2
 else
 	switch host_name
 		case {'hms-beagle2', 'hms-beagle2.local', 'hms-beagle2.lan', 'hms-beagle2.intern', 'hms-beagle2-2.local'}
-			DS.local.SCP_DATA_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller');
-			DS.local.SCP_CODE_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller', 'CODE');
-			DS.remote.SCP_DATA_BaseDir =  fullfile('/', 'Volumes', 'social_neuroscience_data', 'taskcontroller');
-			DS.remote.SCP_CODE_BaseDir = fullfile(DS.remote.SCP_DATA_BaseDir, 'CODE');
-
             DS.local.SCP_DATA_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller', 'SCP_DATA');
 			DS.local.SCP_CODE_BaseDir = fullfile('/', 'space', 'data_local', 'moeller', 'DPZ', 'taskcontroller', 'SCP_CODE');
 			DS.remote.SCP_DATA_BaseDir =  fullfile('/', 'Volumes', 'taskcontroller$', 'SCP_DATA');
 			DS.remote.SCP_CODE_BaseDir = fullfile('/', 'Volumes', 'taskcontroller$', 'SCP_CODE');
-
             
-		case {'SCP-VIDEO-01-A', 'SCP-VIDEO-01-B'}
-			DS.local.SCP_DATA_BaseDir = fullfile('C:');
-			DS.local.SCP_CODE_BaseDir = fullfile('C:', 'SCP_CODE');
-			%DS.remote.SCP_DATA_BaseDir =  fullfile('Z:', 'taskcontroller');
-			DS.remote.SCP_DATA_BaseDir =  fullfile('Y:');
+% 		case {'SCP-VIDEO-01-A', 'SCP-VIDEO-01-B'}
+% 			DS.local.SCP_DATA_BaseDir = fullfile('C:', 'SCP_DATA');
+% 			DS.local.SCP_CODE_BaseDir = fullfile('C:', 'SCP_CODE');
+% 			DS.remote.SCP_DATA_BaseDir =  fullfile('Y:', 'SCP_DATA');			
+% 			DS.remote.SCP_CODE_BaseDir = fullfile('Y:', 'SCP_CODE');
 			
-			DS.remote.SCP_CODE_BaseDir = fullfile(DS.remote.SCP_DATA_BaseDir, 'SCP_CODE');
-			
-		case {'SCP-CTRL-00', 'SCP-CTRL-01B'}
-			DS.local.SCP_DATA_BaseDir = fullfile('C:');
-			DS.local.SCP_CODE_BaseDir = fullfile('C:', 'SCP_CODE');
-			DS.remote.SCP_DATA_BaseDir =  fullfile('Z:', 'taskcontroller');
-			DS.remote.SCP_CODE_BaseDir = fullfile(DS.remote.SCP_DATA_BaseDir, 'SCP_CODE');
+% 		case {'SCP-CTRL-00', 'SCP-CTRL-01'}
+% 			DS.local.SCP_DATA_BaseDir = fullfile('C:', 'SCP_DATA');
+% 			DS.local.SCP_CODE_BaseDir = fullfile('C:', 'SCP_CODE');
+% 			DS.remote.SCP_DATA_BaseDir =  fullfile('Y:', 'SCP_DATA');
+% 			DS.remote.SCP_CODE_BaseDir = fullfile('Y:', 'SCP_CODE');
 			
 		otherwise
 			disp(['Hostname ', host_name, ' not handeled yet']);
@@ -93,14 +86,6 @@ else
 			
 	end
 end
-
-%
-local.SCP_DATA_BaseDir = fullfile('C:');
-local.SCP_CODE_BaseDir = fullfile('C:', 'SCP_CODE');
-remote.SCP_DATA_BaseDir =  fullfile('Z:', 'taskcontroller');
-remote.SCP_CODE_BaseDir = fullfile(DS.remote.SCP_DATA_BaseDir, 'CODE');
-
-
 
 % can we reach the remote code base directory, if not try the local code
 % base directory.
