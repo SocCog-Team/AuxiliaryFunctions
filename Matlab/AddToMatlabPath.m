@@ -31,35 +31,42 @@ if ~exist('MfileToOpen', 'var') || isempty(MfileToOpen) || fnIsMatlabRunningInTe
 	MfileToOpen = [];
 end
 
+FullyQualifiedDirectoryToAdd_is_folder = 0;
+if exist('isfolder') == 5
+	FullyQualifiedDirectoryToAdd_is_folder = isfolder(FullyQualifiedDirectoryToAdd);
+else
+	FullyQualifiedDirectoryToAdd_is_folder = isdir(FullyQualifiedDirectoryToAdd);
+end
+	
 
-if isfolder(FullyQualifiedDirectoryToAdd)
-cd(FullyQualifiedDirectoryToAdd);
-CurrentMatlabPath = path;
-
-
-PathToAddIsAlreadyDefined = strfind(CurrentMatlabPath, [FullyQualifiedDirectoryToAdd, pathsep]);
-
-% delete existing paths containing the calling directory
-% this is a work around for matlab's inability to detect changed files on
-% many network shares (especially windows)
-if ~isempty(PathToAddIsAlreadyDefined)
-	disp([mfilename, ': Removing directory tree from matlab path starting with ', FullyQualifiedDirectoryToAdd]);
-	disp([mfilename, ': This might take a while...']);
-	% turn the path into cell array
-	while length(CurrentMatlabPath) > 0
-		[CurrentPathItem, remain] = strtok(CurrentMatlabPath, pathsep);
-		CurrentMatlabPath = remain(2:end);
-		if ~isempty(strfind(CurrentPathItem, FullyQualifiedDirectoryToAdd))
-			rmpath(CurrentPathItem);
+if (FullyQualifiedDirectoryToAdd_is_folder == 1)
+	cd(FullyQualifiedDirectoryToAdd);
+	CurrentMatlabPath = path;
+	
+	
+	PathToAddIsAlreadyDefined = strfind(CurrentMatlabPath, [FullyQualifiedDirectoryToAdd, pathsep]);
+	
+	% delete existing paths containing the calling directory
+	% this is a work around for matlab's inability to detect changed files on
+	% many network shares (especially windows)
+	if ~isempty(PathToAddIsAlreadyDefined)
+		disp([mfilename, ': Removing directory tree from matlab path starting with ', FullyQualifiedDirectoryToAdd]);
+		disp([mfilename, ': This might take a while...']);
+		% turn the path into cell array
+		while length(CurrentMatlabPath) > 0
+			[CurrentPathItem, remain] = strtok(CurrentMatlabPath, pathsep);
+			CurrentMatlabPath = remain(2:end);
+			if ~isempty(strfind(CurrentPathItem, FullyQualifiedDirectoryToAdd))
+				rmpath(CurrentPathItem);
+			end
 		end
 	end
-end
-% now add them again
-disp([mfilename, ': Adding ', FullyQualifiedDirectoryToAdd, ' and subdirectories temporarily to matlab path.']);
-addpath(genpath(pwd()));
-
+	% now add them again
+	disp([mfilename, ': Adding ', FullyQualifiedDirectoryToAdd, ' and subdirectories temporarily to matlab path.']);
+	addpath(genpath(pwd()));
+	
 else
-	disp(['WARNING: Requested folder (', FullyQualifiedDirectoryToAdd, ' does not exist, skipping']);
+	disp(['WARNING: Requested folder (', FullyQualifiedDirectoryToAdd, ' does not exist, skipping...']);
 end
 
 
