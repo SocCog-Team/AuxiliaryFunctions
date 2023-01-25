@@ -5,6 +5,7 @@ MATLAB_INVOCATION="matlab -r"
 MATLAB_INVOCATION="matlab -nodisplay -nosplash -r"
 
 MATLAB_CMD_STRING="subject_bias_analysis_sm01(0)"
+MATLAB_CMD_STRING="subject_bias_analysis_sm02(0)"
 CALLINGDIR=$( pwd )
 
 
