@@ -35,6 +35,8 @@ AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'External_modified'), [], []
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'gramm'), [], [] );
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'Violinplot-Matlab'), [], [] ); 
 
+AddToMatlabPath( fullfile('C:', 'SCP_CODE', 'measures-of-effect-size-toolbox'), [], [] );
+
 cd(CurrentDir);
 return
 end
