@@ -26,52 +26,29 @@ for i_string = 1 : length(string_list)
 	
 	% some characters are not really helpful inside matlab variable names, so
 	% replace them with something that should not cause problems
-	taboo_char_list =		{' ', '-', '.', '=', '/', '+', '*'};
-	replacement_char_list = {'_', '_', '_dot_', '_eq_', '_', 'plus', 'x'};
+	taboo_char_list =		{' ', '\-', '\.', '\=', '\/', '\+', '\*', ...
+		'^_', '^0', '^1', '^2', '^3', '^4', '^5', '^6', '^7', '^8', '^9', ... % caret ^ matched only on first character
+		};
+	replacement_char_list = {'_', '_', '_dot_', '_eq_', '_', 'Plus', 'x', ...
+		'US', 'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'};
 	
 	% and some characters are not permitted as first char, like underscores or
 	% numbers
-	taboo_first_char_list = {'_', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-	replacement_first_char_list = {'US', 'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'};
+	taboo_first_char_list = {'^_', '^0', '^1', '^2', '^3', '^4', '^5', '^6', '^7', '^8', '^9'};
+	replacement_first_char_list = {'US', 'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', ... % replacements for the first characcter only
+		};
 	
 	sanitized_string = raw_string;
-	% check first character to not be a number
-	taboo_first_char_idx = find(ismember(taboo_first_char_list, raw_string(1)));
-	if ~isempty(taboo_first_char_idx)
-		sanitized_string = [replacement_first_char_list{taboo_first_char_idx}, raw_string(2:end)];
-	end
-	
+
 	
 	for i_taboo_char = 1: length(taboo_char_list)
 		current_taboo_string = taboo_char_list{i_taboo_char};
 		current_replacement_string = replacement_char_list{i_taboo_char};
 		% with regular expressions escape special meaning, we are after
 		% simple character replacements here
-		sanitized_string = regexprep(sanitized_string, ['\', current_taboo_string], current_replacement_string);
+		sanitized_string = regexprep(sanitized_string, current_taboo_string, current_replacement_string);
 	end
 	
-	% this is too complicated remove soon...
-% 	for i_taboo_char = 1: length(taboo_char_list)
-% 		current_taboo_string = taboo_char_list{i_taboo_char};
-% 		current_replacement_string = replacement_char_list{i_taboo_char};
-% 		current_taboo_processed = 0;
-% 		remain = sanitized_string;
-% 		if strcmp(current_taboo_string, '*')
-% 			%disp('Doh...');
-% 		end
-% 		tmp_string = '';
-% 		while (~current_taboo_processed)
-% 			[token, remain] = strtok(remain, current_taboo_string);
-% 			tmp_string = [tmp_string, token, current_replacement_string];
-% 			if isempty(remain)
-% 				current_taboo_processed = 1;
-% 				% we add one superfluous replacement string at the end, so
-% 				% remove that
-% 			%	tmp_string = tmp_string(1:end-length(current_replacement_string));
-% 			end
-% 		end
-% 		sanitized_string = tmp_string;
-% 	end
 	
 	if (strcmp(raw_string, ' '))
 		sanitized_string = 'EmptyString';
