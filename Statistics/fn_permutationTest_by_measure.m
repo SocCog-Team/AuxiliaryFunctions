@@ -1,4 +1,4 @@
-% [p, observeddifference, effectsize] = fn_permutationTest_by_measure(sample1, sample2, permutations [, varargin])
+% [p, observeddifference, effectsize, exact] = fn_permutationTest_by_measure(sample1, sample2, permutations [, varargin])
 %
 %       Permutation test (aka randomisation test), testing for a difference
 %       in means between two samples. 
@@ -87,7 +87,7 @@
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-function [p, observeddifference, effectsize] = fn_permutationTest_by_measure(sample1, sample2, permutations, varargin)
+function [p, observeddifference, effectsize, exact] = fn_permutationTest_by_measure(sample1, sample2, permutations, varargin)
 
 % parsing input
 p = inputParser;
@@ -139,6 +139,8 @@ if ~exact && permutations > nchoosek(numel(allobservations), numel(sample1))
     warning(['the number of permutations (%d) is higher than the number of possible combinations (%d);\n' ...
              'consider running an exact test using the ''exact'' argument'], ...
              permutations, nchoosek(numel(allobservations), numel(sample1)));
+	disp('Automagically switching to exact test...');
+	exact = 1;
 end
 warning(w);
 
