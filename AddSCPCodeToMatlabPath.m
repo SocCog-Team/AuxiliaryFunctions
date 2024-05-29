@@ -32,10 +32,15 @@ AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'Ephys'), [], fullfile(SCPDi
 %AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'LFP_timefrequency_analysis'), [], []); % see/call Ephys/start_LFP_timefrequency_analysis.m
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'External_modified'), [], []); 
 
+% consider moving these into SCP_external_matlab_toolboxes via git
+% submoduls or git subtrees, for now keep them separate
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'gramm'), [], [] );
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'Violinplot-Matlab'), [], [] ); 
 
 AddToMatlabPath( fullfile('C:', 'SCP_CODE', 'measures-of-effect-size-toolbox'), [], [] );
+% for UltraSort
+AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'SCP_external_matlab_toolboxes', 'umapFileExchange'), [], []);
+
 
 cd(CurrentDir);
 return
