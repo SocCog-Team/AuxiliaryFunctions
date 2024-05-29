@@ -8,6 +8,8 @@ if ~exist('verbosity_str', 'var')
 	verbosity_str = 'verbose';
 end
 
+warning_struct =  warning('off', 'MATLAB:print:ContentTypeImageSuggested');
+
 % check whether the path exists, create if not...
 [pathstr, name, img_type] = fileparts(outfile_fqn);
 if isempty(dir(pathstr)),
@@ -15,8 +17,7 @@ if isempty(dir(pathstr)),
 end
 
 % deal with r2016a changes, needs revision
-%if (strcmp(version('-release'), '2016a'))
-if (ismember(version('-release'), {'2016a', '2019a', '2019b', '2020b'}))
+if (strcmp(version('-release'), '2016a'))
 	set(img_fh, 'PaperPositionMode', 'manual');
 	if ~ismember(img_type, {'.png', '.tiff', '.tif'})
 		print_options_str = '-bestfit';
@@ -71,10 +72,20 @@ switch img_type(2:end)
 		disp(['Image type: ', img_type, ' not handled yet...']);
 end
 
-if ~isempty(device_str)
-	device_str = [', ''', device_str, ''''];
-	command_str = ['print(img_fh', device_str, print_options_str, resolution_str, ', outfile_fqn)'];
-	eval(command_str);
+if ismember(img_type(2:end), {'pdf', 'eps'})
+	% exportgraphics has issues with overwriting existing files on windows
+	% shares
+	if isfile(outfile_fqn)
+		delete(outfile_fqn);
+		disp([mfilename, ': File already exists, let''s delete it to avoid silly windows errors...'])
+	end
+	exportgraphics(img_fh, outfile_fqn, 'BackgroundColor', 'none', 'ContentType', 'vector'); % otherwise pdf export choes on multiple transparent overlapping patches
+else
+	if ~isempty(device_str)
+		device_str = [', ''', device_str, ''''];
+		command_str = ['print(img_fh', device_str, print_options_str, resolution_str, ', outfile_fqn)'];
+		eval(command_str);
+	end
 end
 
 if strcmp(verbosity_str, 'verbose')
@@ -86,6 +97,6 @@ if strcmp(verbosity_str, 'verbose')
 end
 
 ret_val = 0;
-
+warning(warning_struct);
 return
 end
