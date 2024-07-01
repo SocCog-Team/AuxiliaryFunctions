@@ -21,6 +21,8 @@
 %               combinations are considered. this is only feasible for
 %               relatively small sample sizes. the 'permutations' argument
 %               will be ignored for an exact test. (1|0, default 0)
+%				SM: exact will be forced if permutations == 0, otherwise it
+%				will just beused if it results in fewer "permutations"
 %       plotresult - whether or not to plot the distribution of randomised
 %                    differences, along with the observed difference (1|0,
 %                    default: 0)
@@ -127,7 +129,7 @@ switch measure
 		pooledstd = sqrt(  ( (numel(sample1)-1)*std(sample1)^2 + (numel(sample2)-1)*std(sample2)^2 )  /  ( numel(allobservations)-2 )  );
 		effectsize = observeddifference / pooledstd;
 	case 'ranksum'
-		[~, ~, ranksum_stats] = ranksum(sample1, sample2, 'method', 'exact');
+		[pval, ~, ranksum_stats] = ranksum(sample1, sample2, 'method', 'exact');
 		observeddifference = ranksum_stats.ranksum;
 		[~, ~, ranksum_stats] = ranksum(sample1, sample2, 'method', 'approximate');
 		pooledstd = NaN;
@@ -146,10 +148,39 @@ warning(w);
 
 if showprogress, w = waitbar(0, 'Preparing test...', 'Name', 'permutationTest'); end
 
+requested_permutations = permutations;
 if exact
     % getting all possible combinations
-    allcombinations = nchoosek(1:numel(allobservations), numel(sample1));
-    permutations = size(allcombinations, 1);
+	try
+		allcombinations = nchoosek(1:numel(allobservations), numel(sample1));
+		permutations = size(allcombinations, 1);
+	catch ME
+		disp([mfilename, ': Too many combinations for exact test, reverting to sampling instead (', num2str(requested_permutations), ' permutations).']);
+		exact = 0;
+		permutations = requested_permutations;
+	end
+end
+
+if (permutations ==0 )
+		disp([mfilename, ': Too many combinations for exact test, but 0 permutations requested (force exact), skipping']);
+		p = [];
+		return
+end
+
+% we really only want the potentially costly exact method when we can not
+% reach the desired number of permutations without resampling...
+if permutations > requested_permutations
+	disp([mfilename, ': requested permutations: ', num2str(requested_permutations), ' planned permutations: ', num2str(permutations)]);
+	if requested_permutations > 0
+		disp([mfilename, ': reverting to sampling of requested number of permutations']);
+		exact = 0;
+		permutations = requested_permutations;
+	else
+		disp([mfilename, ': sticking to exact...']);
+	end
+end
+if permutations < requested_permutations
+	disp([mfilename, ': requested permutations: ', num2str(requested_permutations), ' planned permutations: ', num2str(permutations), ' using exact method']);
 end
 
 % running test
@@ -187,13 +218,28 @@ for n = 1:permutations
 end
 if showprogress, delete(w); end
 
-% getting probability of finding observed difference from random permutations
-if strcmp(sidedness, 'both')
-    p = (length(find(abs(randomdifferences) > abs(observeddifference)))+1) / (permutations+1);
-elseif strcmp(sidedness, 'smaller')
-    p = (length(find(randomdifferences < observeddifference))+1) / (permutations+1);
-elseif strcmp(sidedness, 'larger')
-    p = (length(find(randomdifferences > observeddifference))+1) / (permutations+1);
+switch measure
+	case 'meandifference'
+		% getting probability of finding observed difference from random permutations
+		if strcmp(sidedness, 'both')
+		    p = (length(find(abs(randomdifferences) > abs(observeddifference)))+1) / (permutations+1);
+		elseif strcmp(sidedness, 'smaller')
+		    p = (length(find(randomdifferences < observeddifference))+1) / (permutations+1);
+		elseif strcmp(sidedness, 'larger')
+		 p = (length(find(randomdifferences > observeddifference))+1) / (permutations+1);
+		end
+	case 'ranksum'
+		% getting probability of finding observed ranksum from random permutations
+		% mean differences aresupposed to be zero based, ranksums however
+		% are positive, so demean both
+		mean_random_ranksum = mean(randomdifferences);
+		if strcmp(sidedness, 'both')
+		    p = (length(find(abs(randomdifferences - mean_random_ranksum) > abs(observeddifference - mean_random_ranksum)))+1) / (permutations+1);
+		elseif strcmp(sidedness, 'smaller')
+		    p = (length(find((randomdifferences - mean_random_ranksum) < (observeddifference - mean_random_ranksum)))+1) / (permutations+1);
+		elseif strcmp(sidedness, 'larger')
+		 p = (length(find((randomdifferences - mean_random_ranksum) > (observeddifference - mean_random_ranksum)))+1) / (permutations+1);
+		end
 end
 
 % plotting result
