@@ -2,9 +2,17 @@ function [fisher_table] = fn_fishertest_ratio_versus_random( ratio_count )
 %FN_FISHERTEST_RATIO_VERSUS_RANDOM Summary of this function goes here
 %   Detailed explanation goes here
 
+
 fisher_table = zeros(2);
 fisher_table(:,1) = ratio_count;
 odd_number_handling_method = 'increase_by_one'; % increase_by_one, split_unfavorably
+
+
+if any(isnan(ratio_count))
+	disp([mfilename, ': called with NaN value, skipping...']);
+	fisher_table = zeros(2); % we return an all zer table as fishertest will error out on NaNs
+	return
+end
 
 n_total = sum(ratio_count);
 switch odd_number_handling_method
