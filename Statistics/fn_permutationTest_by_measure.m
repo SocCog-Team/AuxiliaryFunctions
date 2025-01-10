@@ -129,14 +129,21 @@ switch measure
 		pooledstd = sqrt(  ( (numel(sample1)-1)*std(sample1)^2 + (numel(sample2)-1)*std(sample2)^2 )  /  ( numel(allobservations)-2 )  );
 		effectsize = observeddifference / pooledstd;
 	case 'ranksum'
-		[pval, ~, ranksum_stats] = ranksum(sample1, sample2, 'method', 'exact');
-		observeddifference = ranksum_stats.ranksum;
-		[~, ~, ranksum_stats] = ranksum(sample1, sample2, 'method', 'approximate');
+		if (nchoosek(numel(allobservations), numel(sample1))) > permutations
+			[pval, ~, approximate_ranksum_stats] = ranksum(sample1, sample2, 'method', 'approximate');
+			observeddifference = approximate_ranksum_stats.ranksum;
+		else
+			[pval, ~, ranksum_stats] = ranksum(sample1, sample2, 'method', 'exact');
+			observeddifference = ranksum_stats.ranksum;
+			[~, ~, approximate_ranksum_stats] = ranksum(sample1, sample2, 'method', 'approximate');
+		end
 		pooledstd = NaN;
-		effectsize = ranksum_stats.zval / sqrt((sum(~isnan(sample1)) + sum(~isnan(sample2))));
+		effectsize = approximate_ranksum_stats.zval / sqrt((sum(~isnan(sample1)) + sum(~isnan(sample2))));
 end
 
+
 w = warning('off', 'MATLAB:nchoosek:LargeCoefficient');
+possible_permutations = nchoosek(numel(allobservations), numel(sample1));
 if ~exact && permutations > nchoosek(numel(allobservations), numel(sample1))
     warning(['the number of permutations (%d) is higher than the number of possible combinations (%d);\n' ...
              'consider running an exact test using the ''exact'' argument'], ...
@@ -149,6 +156,27 @@ warning(w);
 if showprogress, w = waitbar(0, 'Preparing test...', 'Name', 'permutationTest'); end
 
 requested_permutations = permutations;
+
+if possible_permutations > requested_permutations
+	% we really only want the potentially costly exact method when we can not
+	% reach the desired number of permutations without resampling...
+	if possible_permutations > requested_permutations
+		disp([mfilename, ': requested permutations: ', num2str(requested_permutations), ' possible permutations: ', num2str(possible_permutations)]);
+		if requested_permutations > 0
+			disp([mfilename, ': reverting to sampling of requested number of permutations (', num2str(requested_permutations), ').']);
+			exact = 0;
+			permutations = requested_permutations;
+		else
+			disp([mfilename, ': sticking to exact...']);
+		end
+	end
+	if possible_permutations < requested_permutations
+		disp([mfilename, ': requested permutations: ', num2str(requested_permutations), ' possible permutations: ', num2str(possible_permutations), ' using exact method']);
+	end
+end
+
+
+
 if exact
     % getting all possible combinations
 	try
@@ -203,8 +231,8 @@ for n = 1:permutations
 			randomdifferences(n) = nanmean(randomSample1) - nanmean(randomSample2);
 		case 'ranksum'
 			% the exact ranksum test is pretty slow, see whether the approximte one is fast enough 
-			[~, ~, ranksum_stats] = ranksum(randomSample1, randomSample2, 'method', 'approximate');
-			randomdifferences(n) = ranksum_stats.ranksum;
+			[~, ~, cur_approximate_ranksum_stats] = ranksum(randomSample1, randomSample2, 'method', 'approximate');
+			randomdifferences(n) = cur_approximate_ranksum_stats.ranksum;
 			% or calculate the test statistik by hand
 % 			r = avrRank([randomSample1, randomSample2]);
 % 			n1 = length(randomSample1);
@@ -238,7 +266,7 @@ switch measure
 		elseif strcmp(sidedness, 'smaller')
 		    p = (length(find((randomdifferences - mean_random_ranksum) < (observeddifference - mean_random_ranksum)))+1) / (permutations+1);
 		elseif strcmp(sidedness, 'larger')
-		 p = (length(find((randomdifferences - mean_random_ranksum) > (observeddifference - mean_random_ranksum)))+1) / (permutations+1);
+			p = (length(find((randomdifferences - mean_random_ranksum) > (observeddifference - mean_random_ranksum)))+1) / (permutations+1);
 		end
 end
 
