@@ -1,7 +1,9 @@
-function [ out_matching_item_ldx ] = fn_find_regexpmatch_entries_in_cell_list( cell_list, regexp_match_pattern_list, multi_pattern_mode_string )
+function [ out_matching_item_ldx, out_matching_item_idx ] = fn_find_regexpmatch_entries_in_cell_list( cell_list, regexp_match_pattern_list, multi_pattern_mode_string )
 %FN_FIND_REGEXPMATCH_ENTRIES_IN_CELL_LIST Summary of this function goes here
 %   Detailed explanation goes here
 
+
+out_matching_item_idx = [];
 
 %cur_Channel_Classfication_col_names = fieldnames(cur_Channel_Classfication_table);
 %matching_col_ldx = fn_find_regexpmatch_entries_in_cell_list(cur_Channel_Classfication_col_names, ['^[A|B]_', cur_subject_name, '_*'])
@@ -53,6 +55,10 @@ for i_pattern = 1 : n_patterns
 			error([mfilename, ': unknown multi_pattern_mode_string: ', multi_pattern_mode_string]);
 	end
 
+end
+
+if nargout == 2
+	out_matching_item_idx = find(out_matching_item_ldx);
 end
 
 end

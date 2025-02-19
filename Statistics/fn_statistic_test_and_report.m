@@ -1,18 +1,33 @@
 function [ aggregate_struct, report_string ] = fn_statistic_test_and_report(group_1_name, group_1_data, group_2_name, group_2_data, stat_type, verbose)
 
+% TODO add permutation tests... 
+
 if ~exist('verbose', 'var') || isempty(verbose)
 	verbose = 0;
 end
 report_string = [];
 
-aggregate_struct.([group_1_name, '_mean']) = mean(group_1_data(:), 'omitnan');
-aggregate_struct.([group_2_name, '_mean']) = mean(group_2_data(:), 'omitnan');
-aggregate_struct.([group_1_name, '_median']) = median(group_1_data(:), 'omitnan');
-aggregate_struct.([group_2_name, '_median']) = median(group_2_data(:), 'omitnan');
-aggregate_struct.([group_1_name, '_std']) = std(group_1_data(:), 'omitnan');
-aggregate_struct.([group_2_name, '_std']) = std(group_2_data(:), 'omitnan');
-aggregate_struct.([group_1_name, '_n']) = length(group_1_data(~isnan(group_1_data)));
-aggregate_struct.([group_2_name, '_n']) = length(group_2_data(~isnan(group_2_data)));
+
+aggregate_struct.group_1_name = group_1_name;
+aggregate_struct.group_2_name = group_2_name;
+% aggregate_struct.([group_1_name, '_mean']) = mean(group_1_data(:), 'omitnan');
+% aggregate_struct.([group_2_name, '_mean']) = mean(group_2_data(:), 'omitnan');
+% aggregate_struct.([group_1_name, '_median']) = median(group_1_data(:), 'omitnan');
+% aggregate_struct.([group_2_name, '_median']) = median(group_2_data(:), 'omitnan');
+% aggregate_struct.([group_1_name, '_std']) = std(group_1_data(:), 'omitnan');
+% aggregate_struct.([group_2_name, '_std']) = std(group_2_data(:), 'omitnan');
+% aggregate_struct.([group_1_name, '_n']) = length(group_1_data(~isnan(group_1_data)));
+% aggregate_struct.([group_2_name, '_n']) = length(group_2_data(~isnan(group_2_data)));
+
+aggregate_struct.stat_type = stat_type;
+aggregate_struct.group_1_name_mean = mean(group_1_data(:), 'omitnan');
+aggregate_struct.group_2_name_mean = mean(group_2_data(:), 'omitnan');
+aggregate_struct.group_1_name_median = median(group_1_data(:), 'omitnan');
+aggregate_struct.group_2_name_median = median(group_2_data(:), 'omitnan');
+aggregate_struct.group_1_name_std = std(group_1_data(:), 'omitnan');
+aggregate_struct.group_2_name_std = std(group_2_data(:), 'omitnan');
+aggregate_struct.group_1_name_n = length(group_1_data(~isnan(group_1_data)));
+aggregate_struct.group_2_name_n = length(group_2_data(~isnan(group_2_data)));
 
 
 switch stat_type
@@ -33,6 +48,12 @@ switch stat_type
 		%report_stat = 'median';
 	case 'ranksum_approximate'
 		[aggregate_struct.p, aggregate_struct.h, aggregate_struct.stats] = ranksum(group_1_data(:), group_2_data(:), 'method', 'approximate');
+		report_stat = 'median';	
+	case 'signrank'
+		[aggregate_struct.p, aggregate_struct.h, aggregate_struct.stats] = signrank(group_1_data(:), group_2_data(:), 'method', 'exact');
+		report_stat = 'median';
+	case 'signrank_approximate'
+		[aggregate_struct.p, aggregate_struct.h, aggregate_struct.stats] = signrank(group_1_data(:), group_2_data(:), 'method', 'approximate');
 		report_stat = 'median';
 	otherwise
 		error(['Unhandled statistics requested: ', stat_type]);
@@ -43,24 +64,27 @@ switch report_stat
 	case 'mean_t'
 		% for t-tests....
 		% the first mean and SD
-		report_string = [report_string, group_1_name, ': (M: ', num2str(mean(group_1_data(:), 'omitnan'), '%.5f'), '; SD: ', num2str(std(group_1_data(:), 'omitnan')), '; N: ', num2str(aggregate_struct.([group_1_name, '_n'])), '); ', ...
-			group_2_name, ': (M: ', num2str(mean(group_2_data(:), 'omitnan'), '%.5f'), '; SD: ', num2str(std(group_2_data(:), 'omitnan')), '; N: ', num2str(aggregate_struct.([group_2_name, '_n'])), '); ', ...
+		report_string = [report_string, group_1_name, ': (M: ', num2str(mean(group_1_data(:), 'omitnan'), '%.5f'), '; SD: ', num2str(std(group_1_data(:), 'omitnan')), '; N: ', num2str(aggregate_struct.group_1_name_n), '); ', ...
+			group_2_name, ': (M: ', num2str(mean(group_2_data(:), 'omitnan'), '%.5f'), '; SD: ', num2str(std(group_2_data(:), 'omitnan')), '; N: ', num2str(aggregate_struct.group_2_name_n), '); ', ...
 			't(', num2str(aggregate_struct.stats.df, '%.4f'), '): ', num2str(aggregate_struct.stats.tstat, '%.4f'), '; p:< ', num2str(aggregate_struct.p, '%.10f')];
 		%disp(report_string);
 		%disp(' ');
 	case 'median'
 		% the first median and SD
-		disp(stat_type);
-		report_string = [report_string, group_1_name, ': (MD: ', num2str(median(group_1_data(:), 'omitnan'), '%.5f'), '; N: ', num2str(aggregate_struct.([group_1_name, '_n'])), '); ', ...																		]);
-			group_2_name, ': (MD: ', num2str(median(group_2_data(:), 'omitnan'), '%.5f'), '; N: ', num2str(aggregate_struct.([group_2_name, '_n'])), '); ', ...
+		%disp(stat_type);
+		report_string = [report_string, group_1_name, ': (MD: ', num2str(median(group_1_data(:), 'omitnan'), '%.5f'), '; N: ', num2str(aggregate_struct.group_1_name_n), '); ', ...																		]);
+			group_2_name, ': (MD: ', num2str(median(group_2_data(:), 'omitnan'), '%.5f'), '; N: ', num2str(aggregate_struct.group_2_name_n), '); ', ...
 			'p:< ', num2str(aggregate_struct.p, '%.10g')];
 		if isfield(aggregate_struct.stats, 'ranksum')
 			report_string = [report_string, '; ', 'ranksum: ', num2str(aggregate_struct.stats.ranksum, '%.4g')];
 		end
+		if isfield(aggregate_struct.stats, 'signrank')
+			report_string = [report_string, '; ', 'signrank: ', num2str(aggregate_struct.stats.signrank, '%.4g')];
+		end
 		if isfield(aggregate_struct.stats, 'zval')
 			 report_string = [report_string, '; ', 'Z: ', num2str(aggregate_struct.stats.zval)]; %', r: ', num2str(aggregate_struct.stats.zval/sqrt(aggregate_struct.([group_1_name, '_n'])))]};
-			 if (aggregate_struct.([group_1_name, '_n']) == aggregate_struct.([group_2_name, '_n']))
-				 report_string = [report_string, '; ','r: ', num2str(aggregate_struct.stats.zval/sqrt(aggregate_struct.([group_1_name, '_n'])), '%.4g')];
+			 if (aggregate_struct.group_1_name_n == aggregate_struct.group_2_name_n)
+				 report_string = [report_string, '; ','r: ', num2str(aggregate_struct.stats.zval/sqrt(aggregate_struct.group_1_name_n), '%.4g')];
 			 end
 		end
 		%disp(report_string);

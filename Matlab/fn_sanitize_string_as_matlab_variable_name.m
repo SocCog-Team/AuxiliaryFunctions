@@ -28,14 +28,15 @@ for i_string = 1 : length(string_list)
 	% replace them with something that should not cause problems
 	taboo_char_list =		{' ', '\-', '\.', '\=', '\/', '\+', '\*', ':', ...
 		'^_', '^0', '^1', '^2', '^3', '^4', '^5', '^6', '^7', '^8', '^9', ... % caret ^ matched only on first character
-		};
+		'@'};
 	replacement_char_list = {'_', '_', '_dot_', '_eq_', '_', 'Plus', 'x', '_C_', ...
-		'US', 'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'};
+		'US', 'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', ...
+		'_at_'};
 	
 	% and some characters are not permitted as first char, like underscores or
 	% numbers
 	taboo_first_char_list = {'^_', '^0', '^1', '^2', '^3', '^4', '^5', '^6', '^7', '^8', '^9'};
-	replacement_first_char_list = {'US', 'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', ... % replacements for the first characcter only
+	replacement_first_char_list = {'US', 'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', ... % replacements for the first character only
 		};
 	
 	sanitized_string = raw_string;
