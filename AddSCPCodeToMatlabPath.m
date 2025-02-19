@@ -35,7 +35,7 @@ AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'External_modified'), [], []
 % consider moving these into SCP_external_matlab_toolboxes via git
 % submoduls or git subtrees, for now keep them separate
 AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'gramm'), [], [] );
-AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'Violinplot-Matlab'), [], [] ); 
+AddToMatlabPath( fullfile(SCPDirs.SCP_CODE_BaseDir, 'Violinplot-Matlab2024'), [], [] ); % 'Violinplot-Matlab' or 'Violinplot-Matlab2024'
 
 AddToMatlabPath( fullfile('C:', 'SCP_CODE', 'measures-of-effect-size-toolbox'), [], [] );
 % for UltraSort
