@@ -1,7 +1,8 @@
-function [ sanitized_string ] = fn_sanitize_string_as_matlab_variable_name( raw_string )
+function [ sanitized_string, long_sanitized_string ] = fn_sanitize_string_as_matlab_variable_name( raw_string )
 %FN_SANITIZE_STRING_AS_MATLAB_VARIABLE_NAME Summary of this function goes here
 
 sanitized_string = [];
+long_sanitized_string = [];
 in_raw_string = raw_string;
 
 if ~iscell(raw_string)
@@ -16,22 +17,25 @@ out_list = cell(size(string_list));
 for i_string = 1 : length(string_list)
 	raw_string = string_list{i_string};
 	
-	if length(raw_string) > 64
-		disp('Input string is longer then the max. 64 characters matlab uses as variable name.');
-		disp(raw_string);
-		sanitized_string = [];
-		return
-	end
+
+	% we will catch this later... andin theory we might actually shorten
+	% the string...
+	% if length(raw_string) > 64
+	% 	disp('Input string is longer then the max. 64 characters matlab uses as variable name.');
+	% 	disp(raw_string);
+	% 	sanitized_string = [];
+	% 	return
+	% end
 	
 	
 	% some characters are not really helpful inside matlab variable names, so
 	% replace them with something that should not cause problems
 	taboo_char_list =		{' ', '\-', '\.', '\=', '\/', '\+', '\*', ':', ...
 		'^_', '^0', '^1', '^2', '^3', '^4', '^5', '^6', '^7', '^8', '^9', ... % caret ^ matched only on first character
-		'@'};
+		'@', '&'};
 	replacement_char_list = {'_', '_', '_dot_', '_eq_', '_', 'Plus', 'x', '_C_', ...
 		'US', 'Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', ...
-		'_at_'};
+		'_at_', '_and_'};
 	
 	% and some characters are not permitted as first char, like underscores or
 	% numbers
@@ -59,6 +63,7 @@ for i_string = 1 : length(string_list)
 	if length(sanitized_string) > 64
 		disp('Proto-output string is longer then the max. 64 characters matlab uses as variable name.');
 		disp(sanitized_string);
+		long_sanitized_string = sanitized_string;
 		sanitized_string = [];
 		return
 	end
@@ -68,6 +73,9 @@ end
 if iscell(in_raw_string)
 	sanitized_string = out_list;
 end
+
+long_sanitized_string = sanitized_string;
+
 
 return
 end
