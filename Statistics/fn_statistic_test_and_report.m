@@ -42,17 +42,34 @@ switch stat_type
 		[aggregate_struct.h, aggregate_struct.p, aggregate_struct.ci, aggregate_struct.stats] = ttest2(group_1_data(:), group_2_data(:), 'Vartype','unequal');
 		report_stat = 'mean_t';
 	case 'ranksum'
-		[aggregate_struct.p, aggregate_struct.h, aggregate_struct.stats] = ranksum(group_1_data(:), group_2_data(:), 'method', 'exact');
+		if (aggregate_struct.group_1_name_n + aggregate_struct.group_2_name_n) > 20
+			disp([mfilename, ': WARN: ranksum exact gets slow for large N... consider using ranksum_approximate.']);
+		end
+		if isempty(group_1_data) || isempty(group_2_data)
+			aggregate_struct.p = NaN;
+			aggregate_struct.h = NaN;
+			aggregate_struct.stats = struct();
+		else
+			[aggregate_struct.p, aggregate_struct.h, aggregate_struct.stats] = ranksum(group_1_data(:), group_2_data(:), 'method', 'exact');
+		end
 		report_stat = 'median';
 		%[~, ~, aggregate_struct.stats_approximate] = ranksum(group_1_data(:), group_2_data(:), 'method', 'approximate');
-		%report_stat = 'median';
+		%report_stat = 'median
 	case 'ranksum_approximate'
-		[aggregate_struct.p, aggregate_struct.h, aggregate_struct.stats] = ranksum(group_1_data(:), group_2_data(:), 'method', 'approximate');
+		if isempty(group_1_data) || isempty(group_2_data)
+			aggregate_struct.p = NaN;
+			aggregate_struct.h = NaN;
+			aggregate_struct.stats = struct();
+		else
+			[aggregate_struct.p, aggregate_struct.h, aggregate_struct.stats] = ranksum(group_1_data(:), group_2_data(:), 'method', 'approximate');
+		end
 		report_stat = 'median';	
 	case 'signrank'
+		% paired test
 		[aggregate_struct.p, aggregate_struct.h, aggregate_struct.stats] = signrank(group_1_data(:), group_2_data(:), 'method', 'exact');
 		report_stat = 'median';
 	case 'signrank_approximate'
+		% paired test
 		[aggregate_struct.p, aggregate_struct.h, aggregate_struct.stats] = signrank(group_1_data(:), group_2_data(:), 'method', 'approximate');
 		report_stat = 'median';
 	otherwise
